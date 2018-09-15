@@ -9,6 +9,7 @@ using FluentValidation;
 using WebApiDemo.Models;
 using FluentValidation.AspNetCore;
 using WebApiDemo.Validators;
+using WebApiDemo.Middlewares;
 
 namespace WebApiDemo
 {
@@ -72,7 +73,7 @@ namespace WebApiDemo
             }
 
             app.UseAuthentication();
-
+            app.UseMiddleware<CustomExceptionMiddleware>();
             app.UseMvc();
         }
     }
