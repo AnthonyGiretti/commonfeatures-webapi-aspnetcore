@@ -1,0 +1,70 @@
+2018-09-15 17:22:38.868 -04:00 [Debug] Hosting starting
+2018-09-15 17:22:39.077 -04:00 [Information] User profile is available. Using '"C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2018-09-15 17:22:39.081 -04:00 [Debug] Reading data from file '"C:\Users\ASUS\AppData\Local\ASP.NET\DataProtection-Keys\key-d3f2ee47-657e-47a5-bfc3-24503a68556e.xml"'.
+2018-09-15 17:22:39.112 -04:00 [Debug] Found key {d3f2ee47-657e-47a5-bfc3-24503a68556e}.
+2018-09-15 17:22:39.119 -04:00 [Debug] Considering key {d3f2ee47-657e-47a5-bfc3-24503a68556e} with expiration date 2018-12-02 19:27:30Z as default key.
+2018-09-15 17:22:39.156 -04:00 [Debug] Forwarded activator type request from "Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" to "Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60"
+2018-09-15 17:22:39.158 -04:00 [Debug] Decrypting secret element using Windows DPAPI.
+2018-09-15 17:22:39.159 -04:00 [Debug] Forwarded activator type request from "Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" to "Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60"
+2018-09-15 17:22:39.160 -04:00 [Debug] Opening CNG algorithm '"AES"' from provider 'null' with chaining mode CBC.
+2018-09-15 17:22:39.162 -04:00 [Debug] Opening CNG algorithm '"SHA256"' from provider 'null' with HMAC.
+2018-09-15 17:22:39.164 -04:00 [Debug] Using key {d3f2ee47-657e-47a5-bfc3-24503a68556e} as the default key.
+2018-09-15 17:22:39.165 -04:00 [Debug] Key ring with default key {d3f2ee47-657e-47a5-bfc3-24503a68556e} was loaded during application startup.
+2018-09-15 17:22:39.210 -04:00 [Debug] Compatibility switch "AllowInputFormatterExceptionMessages" in type "MvcJsonOptions" is using default value False
+2018-09-15 17:22:39.224 -04:00 [Debug] Compatibility switch "AllowCombiningAuthorizeFilters" in type "MvcOptions" is using default value False
+2018-09-15 17:22:39.225 -04:00 [Debug] Compatibility switch "AllowBindingHeaderValuesToNonStringModelTypes" in type "MvcOptions" is using default value False
+2018-09-15 17:22:39.225 -04:00 [Debug] Compatibility switch "AllowValidatingTopLevelNodes" in type "MvcOptions" is using default value False
+2018-09-15 17:22:39.225 -04:00 [Debug] Compatibility switch "InputFormatterExceptionPolicy" in type "MvcOptions" is using default value AllExceptions
+2018-09-15 17:22:39.225 -04:00 [Debug] Compatibility switch "SuppressBindingUndefinedValueToEnumType" in type "MvcOptions" is using default value False
+2018-09-15 17:22:39.251 -04:00 [Debug] Compatibility switch "AllowAreas" in type "RazorPagesOptions" is using default value False
+2018-09-15 17:22:39.251 -04:00 [Debug] Compatibility switch "AllowMappingHeadRequestsToGetHandler" in type "RazorPagesOptions" is using default value False
+2018-09-15 17:22:39.279 -04:00 [Debug] Compatibility switch "SuppressTempDataAttributePrefix" in type "MvcViewOptions" is using default value False
+2018-09-15 17:22:39.328 -04:00 [Debug] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider", "Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexTypeModelBinderProvider"]
+2018-09-15 17:22:39.395 -04:00 [Debug] Failed to locate the development https certificate at 'null'.
+2018-09-15 17:22:39.458 -04:00 [Debug] Hosting started
+2018-09-15 17:22:39.458 -04:00 [Debug] Loaded hosting startup assembly "WebApiDemo"
+2018-09-15 17:22:39.458 -04:00 [Debug] Loaded hosting startup assembly "Microsoft.AspNetCore.Server.IISIntegration"
+2018-09-15 17:22:39.529 -04:00 [Debug] Connection id ""0HLGRA5EONQUQ"" started.
+2018-09-15 17:22:39.611 -04:00 [Debug] Connection id ""0HLGRA5EONQUR"" started.
+2018-09-15 17:22:39.636 -04:00 [Information] Request starting HTTP/1.1 GET http://localhost:62258/api/DemoAuthorization/5  
+2018-09-15 17:22:39.636 -04:00 [Information] Request starting HTTP/1.1 DEBUG http://localhost:62258/  0
+2018-09-15 17:22:39.642 -04:00 [Debug] Wildcard detected, all requests with hosts will be allowed.
+2018-09-15 17:22:39.642 -04:00 [Debug] Wildcard detected, all requests with hosts will be allowed.
+2018-09-15 17:22:39.682 -04:00 [Debug] Connection id ""0HLGRA5EONQUQ"" completed keep alive response.
+2018-09-15 17:22:39.682 -04:00 [Information] Request finished in 46.5725ms 200 
+2018-09-15 17:22:39.758 -04:00 [Debug] AuthenticationScheme: "Bearer" was not authenticated.
+2018-09-15 17:22:39.898 -04:00 [Debug] Request successfully matched the route with name 'null' and template '"api/DemoAuthorization/{id}"'.
+2018-09-15 17:22:39.928 -04:00 [Information] Route matched with "{action = \"Get\", controller = \"DemoAuthorization\"}". Executing action "WebApiDemo.Controllers.DemoAuthorizationController.Get (WebApiDemo)"
+2018-09-15 17:22:39.929 -04:00 [Debug] Execution plan of "authorization" filters (in the following order): ["Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter"]
+2018-09-15 17:22:39.929 -04:00 [Debug] Execution plan of "resource" filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Internal.SaveTempDataFilter"]
+2018-09-15 17:22:39.929 -04:00 [Debug] Execution plan of "action" filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter"]
+2018-09-15 17:22:39.929 -04:00 [Debug] Execution plan of "exception" filters (in the following order): ["None"]
+2018-09-15 17:22:39.929 -04:00 [Debug] Execution plan of "result" filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Internal.SaveTempDataFilter"]
+2018-09-15 17:22:39.937 -04:00 [Information] Authorization failed.
+2018-09-15 17:22:39.938 -04:00 [Information] Authorization failed for the request at filter '"Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter"'.
+2018-09-15 17:22:39.941 -04:00 [Information] Executing ChallengeResult with authentication schemes ([]).
+2018-09-15 17:22:39.947 -04:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2018-09-15 17:22:39.950 -04:00 [Information] Executed action "WebApiDemo.Controllers.DemoAuthorizationController.Get (WebApiDemo)" in 18.3328ms
+2018-09-15 17:22:39.950 -04:00 [Debug] Connection id ""0HLGRA5EONQUR"" completed keep alive response.
+2018-09-15 17:22:39.953 -04:00 [Information] Request finished in 317.5954ms 401 
+2018-09-15 17:22:43.928 -04:00 [Information] Request starting HTTP/1.1 POST http://localhost:62258/api/DemoValidation application/json 40
+2018-09-15 17:22:43.928 -04:00 [Debug] AuthenticationScheme: "Bearer" was not authenticated.
+2018-09-15 17:22:43.929 -04:00 [Debug] Request successfully matched the route with name 'null' and template '"api/DemoValidation"'.
+2018-09-15 17:22:43.931 -04:00 [Information] Route matched with "{action = \"Post\", controller = \"DemoValidation\"}". Executing action "WebApiDemo.Controllers.DemoValidationController.Post (WebApiDemo)"
+2018-09-15 17:22:43.931 -04:00 [Debug] Execution plan of "authorization" filters (in the following order): ["None"]
+2018-09-15 17:22:43.931 -04:00 [Debug] Execution plan of "resource" filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Internal.SaveTempDataFilter"]
+2018-09-15 17:22:43.931 -04:00 [Debug] Execution plan of "action" filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter", "WebApiDemo.Attributes.ValidateModelAttribute (Order: 0)"]
+2018-09-15 17:22:43.931 -04:00 [Debug] Execution plan of "exception" filters (in the following order): ["None"]
+2018-09-15 17:22:43.931 -04:00 [Debug] Execution plan of "result" filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Internal.SaveTempDataFilter", "WebApiDemo.Attributes.ValidateModelAttribute (Order: 0)"]
+2018-09-15 17:22:43.943 -04:00 [Debug] Attempting to bind parameter '"user"' of type '"WebApiDemo.Models.User"' ...
+2018-09-15 17:22:43.944 -04:00 [Debug] Attempting to bind model of type '"WebApiDemo.Models.User"' using the name '""' in request data ...
+2018-09-15 17:22:43.944 -04:00 [Debug] Rejected input formatter '"Microsoft.AspNetCore.Mvc.Formatters.JsonPatchInputFormatter"' for content type '"application/json"'.
+2018-09-15 17:22:43.944 -04:00 [Debug] Selected input formatter '"Microsoft.AspNetCore.Mvc.Formatters.JsonInputFormatter"' for content type '"application/json"'.
+2018-09-15 17:22:43.949 -04:00 [Debug] Connection id ""0HLGRA5EONQUQ"", Request id ""0HLGRA5EONQUQ:00000002"": started reading request body.
+2018-09-15 17:22:43.961 -04:00 [Debug] Connection id ""0HLGRA5EONQUQ"", Request id ""0HLGRA5EONQUQ:00000002"": done reading request body.
+2018-09-15 17:22:44.022 -04:00 [Debug] Done attempting to bind model of type '"WebApiDemo.Models.User"' using the name '""'.
+2018-09-15 17:22:44.022 -04:00 [Debug] Done attempting to bind parameter '"user"' of type '"WebApiDemo.Models.User"'.
+2018-09-15 17:22:46.397 -04:00 [Information] Executed action "WebApiDemo.Controllers.DemoValidationController.Post (WebApiDemo)" in 2465.6227ms
+2018-09-15 17:22:48.159 -04:00 [Error] Validation errors
+2018-09-15 17:22:48.171 -04:00 [Debug] Connection id ""0HLGRA5EONQUQ"" completed keep alive response.
+2018-09-15 17:22:48.171 -04:00 [Information] Request finished in 4243.8052ms 500 application/json

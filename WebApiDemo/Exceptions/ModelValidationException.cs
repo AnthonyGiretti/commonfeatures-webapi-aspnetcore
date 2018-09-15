@@ -9,7 +9,7 @@ namespace WebApiDemo
     {
         public IEnumerable<string> Errors { get; }
 
-        public ModelValidationException(IEnumerable<string> errors)
+        public ModelValidationException(IEnumerable<string> errors) : base("Validation errors")
         {
             Errors = errors;
         }

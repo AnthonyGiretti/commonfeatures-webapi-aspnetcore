@@ -10,6 +10,8 @@ using WebApiDemo.Models;
 using FluentValidation.AspNetCore;
 using WebApiDemo.Validators;
 using WebApiDemo.Middlewares;
+using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace WebApiDemo
 {
@@ -17,6 +19,7 @@ namespace WebApiDemo
     {
         public Startup(IConfiguration configuration)
         {
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             Configuration = configuration;
         }
 
@@ -65,13 +68,14 @@ namespace WebApiDemo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            loggerFactory.AddSerilog();
             app.UseAuthentication();
             app.UseMiddleware<CustomExceptionMiddleware>();
             app.UseMvc();

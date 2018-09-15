@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApiDemo.Models
 {
+    [Serializable]
     public class User
     {
         public string Gender { get; set; }

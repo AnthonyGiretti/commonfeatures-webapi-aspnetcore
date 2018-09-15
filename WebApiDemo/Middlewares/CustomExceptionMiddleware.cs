@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace WebApiDemo.Middlewares
     public class CustomExceptionMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<CustomExceptionMiddleware> _logger;
 
-        public CustomExceptionMiddleware(RequestDelegate next)
+        public CustomExceptionMiddleware(RequestDelegate next, ILogger<CustomExceptionMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -32,27 +35,40 @@ namespace WebApiDemo.Middlewares
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var response = context.Response;
-            var message = "Unexpected Error";
-            var code = (int)HttpStatusCode.InternalServerError;
+            var message = exception.Message;
 
             response.ContentType = "application/json";
 
             if (exception is ModelValidationException)
             {
-                
-                response.StatusCode = code;
-                message = "Validation errors";
+                response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var errors = ((ModelValidationException)exception).Errors;
+
+                _logger.LogError(message + " " +  string.Join(',', errors));
+
                 await response.WriteAsync(JsonConvert.SerializeObject(new
                 {
+                    Code = "00001",
                     Message = message,
-                    Errors = ((ModelValidationException)exception).Errors
+                    Errors = errors
                 }));
 
-                // autre type d'erreurs custom
-                /*else if
-                {
+                
+            }
+            // autre type d'erreurs custom
+            /*else if
+            {
 
-                }*/
+            }*/
+            else
+            {
+                response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                await response.WriteAsync(JsonConvert.SerializeObject(new
+                {
+                    Code = "00009",
+                    Message = message
+                }));
+                _logger.LogError(exception, exception.Message);
             }
                  
         }
