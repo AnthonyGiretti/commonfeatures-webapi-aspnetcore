@@ -9,22 +9,14 @@ namespace WebApiDemo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class DemoAuthorizationController : ControllerBase
     {
-        // GET api/values
-        [Authorize]
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET api/values/5
         [Authorize]
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "value";
+            return "Hello";
         }
 
         // POST api/values
@@ -34,7 +26,7 @@ namespace WebApiDemo.Controllers
         {
         }
 
-        // POST api/values
+        // DELETE api/values
         [Authorize(Policy = "SuperSurveyCreator")]
         [HttpDelete]
         public void Delete(int id)
