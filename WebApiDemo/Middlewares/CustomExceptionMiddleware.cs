@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using WebApiDemo.Models;
 
 namespace WebApiDemo.Middlewares
 {
@@ -35,25 +36,23 @@ namespace WebApiDemo.Middlewares
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var response = context.Response;
-            var message = exception.Message;
+            var message = "Unhandled error";
+            var code = "00009";
+            var errors = new List<string>();
 
             response.ContentType = "application/json";
 
             if (exception is ModelValidationException)
             {
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errors = ((ModelValidationException)exception).Errors;
 
-                _logger.LogError(message + " " +  string.Join(',', errors));
+                var customexception = ((ModelValidationException)exception);
+                message = customexception.Message;
+                code = customexception.Code;
+                errors = customexception.Errors.ToList();
 
-                await response.WriteAsync(JsonConvert.SerializeObject(new
-                {
-                    Code = "00001",
-                    Message = message,
-                    Errors = errors
-                }));
-
-                
+                _logger.LogError(message + " " +  string.Join(',', customexception.Errors));
+  
             }
             // autre type d'erreurs custom
             /*else if
@@ -63,14 +62,16 @@ namespace WebApiDemo.Middlewares
             else
             {
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                await response.WriteAsync(JsonConvert.SerializeObject(new
-                {
-                    Code = "00009",
-                    Message = message
-                }));
+               
                 _logger.LogError(exception, exception.Message);
             }
-                 
+
+            await response.WriteAsync(JsonConvert.SerializeObject(new Error
+            {
+                Code = code,
+                Message = message,
+                Errors = errors
+            }));
         }
     }
 }
