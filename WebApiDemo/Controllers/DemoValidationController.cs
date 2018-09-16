@@ -11,18 +11,10 @@ namespace WebApiDemo.Controllers
     [ApiController]
     public class DemoValidationController : ControllerBase
     {
-        private readonly ILogger<DemoValidationController> _logger;
-
-        public DemoValidationController(ILogger<DemoValidationController> logger)
-        {
-            _logger = logger;
-        }
-
         [HttpPost]
         [ValidateModel]
         public IActionResult Post(User user)
         {
-            _logger.LogInformation("Validation of user succeed");
             return NoContent();
         }
     }
