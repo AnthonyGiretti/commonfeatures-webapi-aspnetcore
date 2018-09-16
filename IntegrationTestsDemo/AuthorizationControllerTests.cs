@@ -1,4 +1,6 @@
 using FluentAssertions;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -15,8 +17,23 @@ namespace IntegrationTestsDemo
         }
 
         [Fact]
-        public async Task WhenGetMethodWithAvalidTokenIsInvoked_GetShouldAnswerCorrectly()
+        public async Task WhenGetMethodIsInvokedWithoutAValidToken_GetShouldAnswerUnAuthorized()
         {
+            var response = await _fixture.Client.GetAsync("/api/DemoAuthorization/5");
+
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            response
+            .StatusCode
+            .Should()
+            .Be(HttpStatusCode.Unauthorized);
+            
+        }
+
+        [Fact]
+        public async Task WhenGetMethodIsInvokedWithAValidToken_GetShouldAnswerOkWithExpectedData()
+        {
+            _fixture.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "put a token here");
             var response = await _fixture.Client.GetAsync("/api/DemoAuthorization/5");
 
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -24,7 +41,7 @@ namespace IntegrationTestsDemo
             responseContent
             .Should()
             .Be("Hello");
-            
+
         }
     }
 }
