@@ -21,8 +21,6 @@ namespace IntegrationTestsDemo
         {
             var response = await _fixture.Client.GetAsync("/api/DemoAuthorization/5");
 
-            //var responseContent = await response.Content.ReadAsStringAsync();
-
             response
             .StatusCode
             .Should()
