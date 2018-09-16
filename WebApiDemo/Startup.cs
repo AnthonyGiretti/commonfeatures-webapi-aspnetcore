@@ -12,6 +12,8 @@ using WebApiDemo.Validators;
 using WebApiDemo.Middlewares;
 using Serilog;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Reflection;
 
 namespace WebApiDemo
 {
@@ -65,6 +67,15 @@ namespace WebApiDemo
             });
 
             services.AddMvc().AddFluentValidation();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
+
+            services.AddMiniProfiler(options =>
+                options.RouteBasePath = "/profiler"
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +86,14 @@ namespace WebApiDemo
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiniProfiler();
+            //app.UseStaticFiles();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.RoutePrefix = "api-doc";
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApiDemo.SwaggerIndex.html");
+            });
             loggerFactory.AddSerilog();
             app.UseAuthentication();
             app.UseMiddleware<CustomExceptionMiddleware>();
