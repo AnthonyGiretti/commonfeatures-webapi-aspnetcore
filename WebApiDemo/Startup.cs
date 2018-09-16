@@ -104,6 +104,7 @@ namespace WebApiDemo
             app.UseSwaggerUI(c => {
                 c.RoutePrefix = "api-doc";
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                //index.html customizable downloadable here: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/src/Swashbuckle.AspNetCore.SwaggerUI/index.html
                 c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApiDemo.SwaggerIndex.html");
             });
             loggerFactory.AddSerilog();
