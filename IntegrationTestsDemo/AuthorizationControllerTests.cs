@@ -6,19 +6,25 @@ namespace IntegrationTestsDemo
 {
     public class AuthorizationControllerTests : IClassFixture<TestServerFixture>
     {
+        private readonly TestServerFixture _fixture;
+
+
+        public AuthorizationControllerTests(TestServerFixture fixture)
+        {
+            _fixture = fixture;
+        }
+
         [Fact]
         public async Task WhenGetMethodWithAvalidTokenIsInvoked_GetShouldAnswerCorrectly()
         {
-            using (TestServerFixture fixture = new TestServerFixture())
-            {
-                var response = await fixture.Client.GetAsync("/api/values/5");
+            var response = await _fixture.Client.GetAsync("/api/DemoAuthorization/5");
 
-                var responseContent = await response.Content.ReadAsStringAsync();
+            var responseContent = await response.Content.ReadAsStringAsync();
 
-                responseContent
-                .Should()
-                .Be("value");
-            }
+            responseContent
+            .Should()
+            .Be("Hello");
+            
         }
     }
 }

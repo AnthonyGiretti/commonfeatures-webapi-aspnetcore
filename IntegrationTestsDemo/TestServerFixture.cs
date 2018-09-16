@@ -15,7 +15,7 @@ namespace IntegrationTestsDemo
         public TestServerFixture()
         {
             var builder = new WebHostBuilder()
-                   .UseContentRoot(@"E:\Codes sources\Commonfeatures-webapi-aspnetcore\WebApiDemo")
+                   //.UseContentRoot(@"E:\Codes sources\Commonfeatures-webapi-aspnetcore\WebApiDemo")
                    .UseEnvironment("Development")
                    .UseStartup<Startup>();
 
