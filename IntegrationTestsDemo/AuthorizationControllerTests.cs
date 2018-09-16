@@ -6,39 +6,45 @@ using Xunit;
 
 namespace IntegrationTestsDemo
 {
-    public class AuthorizationControllerTests : IClassFixture<TestServerFixture>
+    public class AuthorizationControllerTests //: IClassFixture<TestServerFixture>
     {
-        private readonly TestServerFixture _fixture;
+       // private readonly TestServerFixture _fixture;
 
 
-        public AuthorizationControllerTests(TestServerFixture fixture)
-        {
-            _fixture = fixture;
-        }
+        //public AuthorizationControllerTests(TestServerFixture fixture)
+        //{
+        //    _fixture = fixture;
+        //}
 
         [Fact]
         public async Task WhenGetMethodIsInvokedWithoutAValidToken_GetShouldAnswerUnAuthorized()
         {
-            var response = await _fixture.Client.GetAsync("/api/DemoAuthorization/5");
+            using (TestServerFixture fixture = new TestServerFixture())
+            {
+                var response = await fixture.Client.GetAsync("/api/DemoAuthorization/5");
 
-            response
-            .StatusCode
-            .Should()
-            .Be(HttpStatusCode.Unauthorized);
-            
+                response
+                .StatusCode
+                .Should()
+                .Be(HttpStatusCode.Unauthorized);
+            }
+
         }
 
         [Fact]
         public async Task WhenGetMethodIsInvokedWithAValidToken_GetShouldAnswerOkWithExpectedData()
         {
-            _fixture.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "put a token here");
-            var response = await _fixture.Client.GetAsync("/api/DemoAuthorization/5");
+            using (TestServerFixture fixture = new TestServerFixture())
+            {
+                fixture.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "JWT here");
+                var response = await fixture.Client.GetAsync("/api/DemoAuthorization/5");
 
-            var responseContent = await response.Content.ReadAsStringAsync();
+                var responseContent = await response.Content.ReadAsStringAsync();
 
-            responseContent
-            .Should()
-            .Be("Hello");
+                responseContent
+                .Should()
+                .Be("Hello");
+            }
 
         }
     }
