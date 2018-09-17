@@ -36,6 +36,7 @@ namespace IntegrationTestsDemo
         {
             using (TestServerFixture fixture = new TestServerFixture())
             {
+                // Implement here your token obtaining
                 fixture.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "JWT here");
                 var response = await fixture.Client.GetAsync("/api/DemoAuthorization/5");
 
