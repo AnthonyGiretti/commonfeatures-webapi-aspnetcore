@@ -15,6 +15,7 @@ namespace WebApiDemo.Controllers
     public class DemoProfilingController : ControllerBase
     {
         // GET: api/DemoProfiling
+        // url to see last profile check: http://localhost:62258/profiler/results
         [HttpGet]
         public IEnumerable<string> Get()
         {
