@@ -31,6 +31,7 @@ namespace WebApiDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Authentication
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -43,6 +44,7 @@ namespace WebApiDemo
                 options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
             });
 
+            // Autorization + policies
             services.AddAuthorization(opts =>
             {
                 opts.AddPolicy("SurveyCreator", p =>
@@ -62,13 +64,21 @@ namespace WebApiDemo
             // Validators
             services.AddSingleton<IValidator<User>, UserValidator>();
 
+            // override modelstate for fluentvalidation
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+            // cache in memory
+            services.AddMemoryCache();
+            // caching response for middlewares
+            services.AddResponseCaching();
+
+            // mvc + validating
             services.AddMvc().AddFluentValidation();
 
+            // documenting
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
@@ -85,6 +95,7 @@ namespace WebApiDemo
                 });
             });
 
+            // profiling
             services.AddMiniProfiler(options =>
                 options.RouteBasePath = "/profiler"
             );
@@ -98,8 +109,13 @@ namespace WebApiDemo
                 app.UseDeveloperExceptionPage();
             }
 
+            // caching response for middlewares
+            app.UseResponseCaching();
+
+            // porfiling
             app.UseMiniProfiler();
-            //app.UseStaticFiles();
+
+            // documenting
             app.UseSwagger();
             app.UseSwaggerUI(c => {
                 c.RoutePrefix = "api-doc";
@@ -107,9 +123,19 @@ namespace WebApiDemo
                 //index.html customizable downloadable here: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/src/Swashbuckle.AspNetCore.SwaggerUI/index.html
                 c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApiDemo.SwaggerIndex.html");
             });
+
+            // logging
             loggerFactory.AddSerilog();
+
+            // authenticating
             app.UseAuthentication();
+
+            // global caching
+            //app.UseMiddleware<CachingMiddleware>();
+
+            // global exception handling
             app.UseMiddleware<CustomExceptionMiddleware>();
+
             app.UseMvc();
         }
     }
