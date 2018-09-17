@@ -112,7 +112,7 @@ namespace WebApiDemo
             // caching response for middlewares
             app.UseResponseCaching();
 
-            
+            // profiling, url to see last profile check: http://localhost:62258/profiler/results
             app.UseMiniProfiler();
 
             // documenting
