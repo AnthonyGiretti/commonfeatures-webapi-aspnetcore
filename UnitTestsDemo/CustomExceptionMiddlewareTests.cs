@@ -18,15 +18,16 @@ namespace UnitTestsDemo
     public class CustomExceptionMiddlewareTests
     {
         [Fact]
-        public async Task WhenACustomExceptionIsRaised_CustomExceptionMiddlewareShouldHandleItToCustomErrorResponse()
+        public async Task WhenACustomExceptionIsRaised_CustomExceptionMiddlewareShouldHandleItToCustomErrorResponseAndLoggerCalled()
         {
             // Arrange
             var loggerMock = Substitute.For<ILogger<CustomExceptionMiddleware>>();
             var middleware = new CustomExceptionMiddleware((innerHttpContext) =>
             {
-                throw new ModelValidationException(new List<string>() { "Error1, Error2" });
+                throw new ModelValidationException(new List<string>() { "Error1", "Error2" });
             }, loggerMock);
 
+            // Use DefaultHttpContext insteadof mocking HttpContext
             var context = new DefaultHttpContext();
 
             // Initialize response body
@@ -46,15 +47,17 @@ namespace UnitTestsDemo
             //Assert
             objResponse
             .Should()
-            .BeEquivalentTo(new { Message = "Validation errors", Errors = new List<string>() { "Error1, Error2" }, Code = "00001" });
+            .BeEquivalentTo(new { Message = "Validation errors Error1,Error2", Errors = new List<string>() { "Error1", "Error2" }, Code = "00001" });
 
             context.Response.StatusCode
             .Should()
             .Be((int)HttpStatusCode.BadRequest);
+
+            loggerMock.Received(1);
         }
 
         [Fact]
-        public async Task WhenAGenericExceptionIsRaised_CustomExceptionMiddlewareShouldHandleItToDefaultErrorResponse()
+        public async Task WhenAGenericExceptionIsRaised_CustomExceptionMiddlewareShouldHandleItToDefaultErrorResponseAndLoggerCalled()
         {
             // Arrange
             var loggerMock = Substitute.For<ILogger<CustomExceptionMiddleware>>();
@@ -63,6 +66,7 @@ namespace UnitTestsDemo
                 throw new Exception("Oooops error!");
             }, loggerMock);
 
+            // Use DefaultHttpContext insteadof mocking HttpContext
             var context = new DefaultHttpContext();
 
             // Initialize response body
@@ -87,6 +91,8 @@ namespace UnitTestsDemo
             context.Response.StatusCode
             .Should()
             .Be((int)HttpStatusCode.InternalServerError);
+
+            loggerMock.Received(1);
         }
     }
 }

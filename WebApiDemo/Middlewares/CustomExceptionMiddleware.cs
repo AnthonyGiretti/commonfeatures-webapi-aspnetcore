@@ -47,12 +47,12 @@ namespace WebApiDemo.Middlewares
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
 
                 var customexception = ((ModelValidationException)exception);
-                message = customexception.Message;
+                message = customexception.Message + " " + string.Join(',', customexception.Errors);
                 code = customexception.Code;
                 errors = customexception.Errors.ToList();
 
-                _logger.LogError(message + " " +  string.Join(',', customexception.Errors));
-  
+                // log custom message error
+                _logger.LogError(exception, message);
             }
             // autre type d'erreurs custom
             /*else if
@@ -62,10 +62,12 @@ namespace WebApiDemo.Middlewares
             else
             {
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
-               
+
+                // log exception message
                 _logger.LogError(exception, exception.Message);
             }
 
+            // Response
             await response.WriteAsync(JsonConvert.SerializeObject(new Error
             {
                 Code = code,
