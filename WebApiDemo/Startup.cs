@@ -22,6 +22,7 @@ namespace WebApiDemo
     {
         public Startup(IConfiguration configuration)
         {
+            // Init Serilog configuration
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             Configuration = configuration;
         }
@@ -49,12 +50,14 @@ namespace WebApiDemo
             {
                 opts.AddPolicy("SurveyCreator", p =>
                 {
+                    // Using value text for demo show, else use enum : ClaimTypes.Role
                     p.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "SurveyCreator");
 
                 });
 
                 opts.AddPolicy("SuperSurveyCreator", p =>
                 {
+                    // Using value text for demo show, else use enum : ClaimTypes.Role
                     p.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "SurveyCreator");
                     p.RequireClaim("groups", "8115e3be-ac7a-4886-a1e6-5b6aaf810a8f");
 
