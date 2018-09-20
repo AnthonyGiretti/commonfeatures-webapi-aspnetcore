@@ -17,6 +17,7 @@ namespace WebApiDemo.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
+            // Smaple of global cache for any request that returns 200
             context.Response.GetTypedHeaders().CacheControl =
             new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
             {
