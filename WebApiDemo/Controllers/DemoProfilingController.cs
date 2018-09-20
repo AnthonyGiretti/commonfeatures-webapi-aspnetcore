@@ -16,6 +16,7 @@ namespace WebApiDemo.Controllers
     {
         // GET: api/DemoProfiling
         // url to see last profile check: http://localhost:62258/profiler/results
+        // profile available in swaager page too
         [HttpGet]
         public IEnumerable<string> Get()
         {
