@@ -42,6 +42,7 @@ namespace WebApiDemo.Middlewares
 
             response.ContentType = "application/json";
 
+            // custom error handling
             if (exception is ModelValidationException)
             {
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -54,16 +55,17 @@ namespace WebApiDemo.Middlewares
                 // log custom message error
                 _logger.LogError(exception, message);
             }
-            // autre type d'erreurs custom
+            // other custom error
             /*else if
             {
 
             }*/
             else
             {
+                
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                // log exception message
+                // log generic exception message (original error)
                 _logger.LogError(exception, exception.Message);
             }
 
