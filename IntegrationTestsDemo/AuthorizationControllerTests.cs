@@ -21,8 +21,10 @@ namespace IntegrationTestsDemo
         {
             using (TestServerFixture fixture = new TestServerFixture())
             {
+                // Act
                 var response = await fixture.Client.GetAsync("/api/DemoAuthorization/5");
-
+                
+                // Assert
                 response
                 .StatusCode
                 .Should()
@@ -40,8 +42,10 @@ namespace IntegrationTestsDemo
                 fixture.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "JWT here");
                 var response = await fixture.Client.GetAsync("/api/DemoAuthorization/5");
 
+                // Act
                 var responseContent = await response.Content.ReadAsStringAsync();
 
+                // Assert
                 responseContent
                 .Should()
                 .Be("Hello");
