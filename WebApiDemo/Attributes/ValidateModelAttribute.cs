@@ -11,6 +11,7 @@ namespace WebApiDemo.Attributes
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            // Model State populated by FluentValidation
             if (!context.ModelState.IsValid)
             {
                 var modelStateList = context.ModelState.Values.ToList();
