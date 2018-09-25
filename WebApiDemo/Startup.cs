@@ -140,6 +140,9 @@ namespace WebApiDemo
             // global exception handling
             app.UseMiddleware<CustomExceptionMiddleware>();
 
+            // mini profile 
+            app.UseMiddleware<MiniProfilerMiddleware>();
+
             app.UseMvc();
         }
     }
