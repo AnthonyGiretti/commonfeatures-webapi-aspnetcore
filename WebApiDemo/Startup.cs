@@ -1,20 +1,20 @@
-﻿using System;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using FluentValidation;
-using WebApiDemo.Models;
-using FluentValidation.AspNetCore;
-using WebApiDemo.Validators;
-using WebApiDemo.Middlewares;
-using Serilog;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
-using System.Reflection;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
+using WebApiDemo.Middlewares;
+using WebApiDemo.Models;
+using WebApiDemo.Validators;
 
 namespace WebApiDemo
 {
@@ -120,7 +120,8 @@ namespace WebApiDemo
 
             // documenting
             app.UseSwagger();
-            app.UseSwaggerUI(c => {
+            app.UseSwaggerUI(c =>
+            {
                 c.RoutePrefix = "api-doc";
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 // index.html customizable downloadable here: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/src/Swashbuckle.AspNetCore.SwaggerUI/index.html
@@ -139,6 +140,9 @@ namespace WebApiDemo
 
             // global exception handling
             app.UseMiddleware<CustomExceptionMiddleware>();
+
+            // mini profiler 
+            app.UseMiddleware<MiniProfilerMiddleware>();
 
             app.UseMvc();
         }
