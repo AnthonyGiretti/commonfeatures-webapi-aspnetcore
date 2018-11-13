@@ -41,34 +41,11 @@ namespace WebApiDemo.Middlewares
             var errors = new List<string>();
 
             response.ContentType = "application/json";
+            response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            // custom error handling
-            if (exception is ModelValidationException)
-            {
-                response.StatusCode = (int)HttpStatusCode.BadRequest;
-
-                var customexception = ((ModelValidationException)exception);
-                message = customexception.Message + " " + string.Join(',', customexception.Errors);
-                code = customexception.Code;
-                errors = customexception.Errors.ToList();
-
-                // log custom message error
-                _logger.LogError(exception, message);
-            }
-            // other custom error
-            /*else if
-            {
-
-            }*/
-            else
-            {
-                
-                response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-                // log generic exception message (original error)
-                _logger.LogError(exception, exception.Message);
-            }
-
+            // log generic exception message (original error)
+            _logger.LogError(exception, exception.Message);
+            
             // Response
             await response.WriteAsync(JsonConvert.SerializeObject(new Error
             {

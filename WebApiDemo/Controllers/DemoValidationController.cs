@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using WebApiDemo.Attributes;
 using WebApiDemo.Models;
 using WebApiDemo.Validators;
 
@@ -12,7 +11,6 @@ namespace WebApiDemo.Controllers
     public class DemoValidationController : ControllerBase
     {
         [HttpPost]
-        [ValidateModel]
         public IActionResult Post(User user)
         {
             return NoContent();

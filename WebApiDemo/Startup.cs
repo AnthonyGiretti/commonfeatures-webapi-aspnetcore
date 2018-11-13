@@ -15,6 +15,7 @@ using System.Reflection;
 using WebApiDemo.Middlewares;
 using WebApiDemo.Models;
 using WebApiDemo.Validators;
+using System.Linq;
 
 namespace WebApiDemo
 {
@@ -67,19 +68,29 @@ namespace WebApiDemo
             // Validators
             services.AddSingleton<IValidator<User>, UserValidator>();
 
-            // override modelstate for fluentvalidation
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-            });
-
             // cache in memory
             services.AddMemoryCache();
             // caching response for middlewares
             services.AddResponseCaching();
 
             // mvc + validating
-            services.AddMvc().AddFluentValidation();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddFluentValidation();
+
+            // override modelstate for fluentvalidation
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = (context) =>
+                {
+                    var errors = context.ModelState.Values.SelectMany(x => x.Errors.Select(p => p.ErrorMessage)).ToList();
+                    var result = new
+                    {
+                        Code = "00009",
+                        Message = "Validation errors",
+                        Errors = errors
+                    };
+                    return new BadRequestObjectResult(result);
+                };
+            });
 
             // documenting
             services.AddSwaggerGen(c =>
