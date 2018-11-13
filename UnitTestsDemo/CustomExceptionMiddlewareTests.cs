@@ -18,45 +18,6 @@ namespace UnitTestsDemo
     public class CustomExceptionMiddlewareTests
     {
         [Fact]
-        public async Task WhenACustomExceptionIsRaised_CustomExceptionMiddlewareShouldHandleItToCustomErrorResponseAndLoggerCalled()
-        {
-            // Arrange
-            var loggerMock = Substitute.For<ILogger<CustomExceptionMiddleware>>();
-            var middleware = new CustomExceptionMiddleware((innerHttpContext) =>
-            {
-                throw new ModelValidationException(new List<string>() { "Error1", "Error2" });
-            }, loggerMock);
-
-            // Use DefaultHttpContext insteadof mocking HttpContext
-            var context = new DefaultHttpContext();
-
-            // Initialize response body
-            context.Response.Body = new MemoryStream();
-
-            //Act
-            await middleware.Invoke(context);
-
-            // set the position to beginning before reading
-            context.Response.Body.Seek(0, SeekOrigin.Begin);
-
-            // Read the response
-            var reader = new StreamReader(context.Response.Body);
-            var streamText = reader.ReadToEnd();
-            var objResponse = JsonConvert.DeserializeObject<Error>(streamText);
-
-            //Assert
-            objResponse
-            .Should()
-            .BeEquivalentTo(new { Message = "Validation errors Error1,Error2", Errors = new List<string>() { "Error1", "Error2" }, Code = "00001" });
-
-            context.Response.StatusCode
-            .Should()
-            .Be((int)HttpStatusCode.BadRequest);
-
-            loggerMock.Received(1);
-        }
-
-        [Fact]
         public async Task WhenAGenericExceptionIsRaised_CustomExceptionMiddlewareShouldHandleItToDefaultErrorResponseAndLoggerCalled()
         {
             // Arrange

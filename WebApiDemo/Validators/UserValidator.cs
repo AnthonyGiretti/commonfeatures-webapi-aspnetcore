@@ -13,14 +13,17 @@ namespace WebApiDemo.Validators
         {
             RuleFor(x => x.FirstName)
             .NotNull()
+            .NotEmpty()
             .WithMessage("FirstName is mandatory.");
 
             RuleFor(x => x.LastName)
             .NotNull()
+            .NotEmpty()
             .WithMessage("LastName is mandatory.");
 
             RuleFor(x => x.SIN)
             .NotNull()
+            .NotEmpty()
             .WithMessage("SIN is mandatory.")
             .Must((o, list, context) =>
             {
