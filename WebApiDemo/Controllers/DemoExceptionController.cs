@@ -22,19 +22,11 @@ namespace WebApiDemo.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            try
-            {
-                _logger.LogInformation("Could break here :(");
-                throw new Exception("bohhhh very bad error");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "It broke :(");
-                //row e; // let middleware hanle it
-            }
+            _logger.LogInformation("Could break here :(");
+            throw new Exception("bohhhh very bad error");
+
             return new string[] { "value1", "value2" };
         }
 
-       
     }
 }
