@@ -21,6 +21,7 @@ namespace WebApiDemo.Controllers
 
         // POST api/values
         [Authorize(Policy = "SurveyCreator")]
+        //[Authorize(Roles = "SurveyCreator")]
         [HttpPost]
         public void Post([FromBody] string value)
         {
