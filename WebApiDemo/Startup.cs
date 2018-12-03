@@ -16,6 +16,7 @@ using WebApiDemo.Middlewares;
 using WebApiDemo.Models;
 using WebApiDemo.Validators;
 using System.Linq;
+using System.Security.Claims;
 
 namespace WebApiDemo
 {
@@ -61,7 +62,6 @@ namespace WebApiDemo
                     // Using value text for demo show, else use enum : ClaimTypes.Role
                     p.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "SurveyCreator");
                     p.RequireClaim("groups", "8115e3be-ac7a-4886-a1e6-5b6aaf810a8f");
-
                 });
             });
 
