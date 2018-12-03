@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WebApiDemo.AuthorizationHandlers
 {
-    public class SuperSurveyCreatorAutorizationHandler : AuthorizationHandler<object>
+    public class SuperSurveyCreatorAutorizationHandler : AuthorizationHandler<SuperSurveyCreatorRequirement>
     {
         private readonly ILogger<SuperSurveyCreatorAutorizationHandler> _logger;
 
@@ -17,7 +17,7 @@ namespace WebApiDemo.AuthorizationHandlers
             _logger = logger;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, object requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, SuperSurveyCreatorRequirement requirement)
         {
             bool hasRole = false;
             bool hasGroup = false;
