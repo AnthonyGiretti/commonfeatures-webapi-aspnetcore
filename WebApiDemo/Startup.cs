@@ -17,6 +17,8 @@ using WebApiDemo.Models;
 using WebApiDemo.Validators;
 using System.Linq;
 using System.Security.Claims;
+using WebApiDemo.AuthorizationHandlers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApiDemo
 {
@@ -60,10 +62,14 @@ namespace WebApiDemo
                 opts.AddPolicy("SuperSurveyCreator", p =>
                 {
                     // Using value text for demo show, else use enum : ClaimTypes.Role
-                    p.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "SurveyCreator");
-                    p.RequireClaim("groups", "8115e3be-ac7a-4886-a1e6-5b6aaf810a8f");
+                    //p.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "SurveyCreator");
+                    //p.RequireClaim("groups", "8115e3be-ac7a-4886-a1e6-5b6aaf810a8f");
+                    p.Requirements.Add(new SuperSurveyCreatorRequirement("SurveyCreator", "8115e3be-ac7a-4886-a1e6-5b6aaf810a8f"));
                 });
             });
+
+            // Authorization handlers
+            services.AddSingleton<IAuthorizationHandler, SuperSurveyCreatorAutorizationHandler>();
 
             // Validators
             services.AddSingleton<IValidator<User>, UserValidator>();
