@@ -22,12 +22,12 @@ namespace WebApiDemo.AuthorizationHandlers
             bool hasRole = false;
             bool hasGroup = false;
 
-            if (!context.User.HasClaim(c => c.Type == ClaimTypes.Role && c.Value == "SurveyCreator"))
+            if (!context.User.HasClaim(c => c.Type == ClaimTypes.Role && c.Value == requirement.Role))
                 _logger.LogInformation("SurveyCreator: required Role not supplied");
             else
                 hasRole = true;
 
-            if (!context.User.HasClaim(c => c.Type == "groups" && c.Value == "8115e3be-ac7a-4886-a1e6-5b6aaf810a8f"))
+            if (!context.User.HasClaim(c => c.Type == "groups" && c.Value == requirement.Group))
                 _logger.LogInformation("SurveyCreator: required Group not supplied");
             else
                 hasGroup = true;

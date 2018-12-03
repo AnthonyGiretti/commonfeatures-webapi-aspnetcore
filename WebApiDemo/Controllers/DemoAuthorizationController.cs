@@ -29,7 +29,7 @@ namespace WebApiDemo.Controllers
 
         // DELETE api/values
         [Authorize(Policy = "SuperSurveyCreator")]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public void Delete(int id)
         {
         }
