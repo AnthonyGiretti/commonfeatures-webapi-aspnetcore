@@ -80,7 +80,7 @@ namespace WebApiDemo
             services.AddResponseCaching();
 
             // mvc + validating
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddFluentValidation();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddFluentValidation();
 
             // override modelstate for fluentvalidation
             services.Configure<ApiBehaviorOptions>(options =>
