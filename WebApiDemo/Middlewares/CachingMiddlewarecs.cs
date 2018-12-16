@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.ResponseCaching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +18,17 @@ namespace WebApiDemo.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            // Smaple of global cache for any request that returns 200
+            // Sample of global cache for any request that returns 200
             context.Response.GetTypedHeaders().CacheControl =
             new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
             {
-                Public = true,
                 MaxAge = TimeSpan.FromSeconds(10)
             };
+            var responseCachingFeature = context.Features.Get<IResponseCachingFeature>();
+            if (responseCachingFeature != null)
+            {
+                responseCachingFeature.VaryByQueryKeys = new[] { "Param1" };
+            }
             await _next(context);
         }     
     }
