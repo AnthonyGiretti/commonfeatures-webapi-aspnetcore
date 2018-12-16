@@ -52,7 +52,7 @@ namespace WebApiDemo.Controllers
         private string LongTimeOperation()
         {
             Thread.Sleep(5000);
-            return "Long time operation done!" + DateTime.Now.ToString();
+            return "Long time operation done! " + DateTime.Now.ToString();
         }
     }
 }
