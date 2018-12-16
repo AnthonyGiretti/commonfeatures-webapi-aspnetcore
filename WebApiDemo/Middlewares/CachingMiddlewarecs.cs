@@ -22,7 +22,8 @@ namespace WebApiDemo.Middlewares
             context.Response.GetTypedHeaders().CacheControl =
             new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
             {
-                MaxAge = TimeSpan.FromSeconds(10)
+                MaxAge = TimeSpan.FromSeconds(10),
+                Public = true
             };
             var responseCachingFeature = context.Features.Get<IResponseCachingFeature>();
             if (responseCachingFeature != null)

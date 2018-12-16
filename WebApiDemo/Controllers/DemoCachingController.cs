@@ -35,7 +35,7 @@ namespace WebApiDemo.Controllers
 
         // GET: api/DemoCaching/responsecache
         [HttpGet("responsecache")]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Client)]
 
         public string Get2()
         {
@@ -52,7 +52,7 @@ namespace WebApiDemo.Controllers
         private string LongTimeOperation()
         {
             Thread.Sleep(5000);
-            return "Long time operation done!" + DateTime.Now.ToLongDateString();
+            return "Long time operation done!" + DateTime.Now.ToString();
         }
     }
 }

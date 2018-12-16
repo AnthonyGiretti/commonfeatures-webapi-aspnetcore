@@ -153,7 +153,7 @@ namespace WebApiDemo
             app.UseAuthentication();
 
             // global caching
-            //app.UseMiddleware<CachingMiddleware>();
+            app.UseMiddleware<CachingMiddleware>();
 
             // global exception handling
             app.UseMiddleware<CustomExceptionMiddleware>();
