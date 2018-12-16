@@ -23,11 +23,11 @@ namespace WebApiDemo.Controllers
         
         // GET: api/DemoCaching/memorycache
         [HttpGet("memorycache")]
-        public IEnumerable<string> Get()
+        public string Get()
         {
             var cacheEntry = _cache.GetOrCreate("MyCacheKey", entry =>
             {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(10);
+                entry.SlidingExpiration = TimeSpan.FromSeconds(10);
                 return LongTimeOperation();
             });
             return cacheEntry;
@@ -37,22 +37,22 @@ namespace WebApiDemo.Controllers
         [HttpGet("responsecache")]
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
 
-        public IEnumerable<string> Get2()
+        public string Get2()
         {
             return LongTimeOperation();
         }
 
         // GET: api/DemoCaching/globalcache
         [HttpGet("globalcache")]
-        public IEnumerable<string> Get3()
+        public string Get3()
         {
             return LongTimeOperation();
         }
 
-        private string[] LongTimeOperation()
+        private string LongTimeOperation()
         {
             Thread.Sleep(5000);
-            return new string[] { "value1", "value2" };
+            return "Long time operation done!" + DateTime.Now.ToLongDateString();
         }
     }
 }
