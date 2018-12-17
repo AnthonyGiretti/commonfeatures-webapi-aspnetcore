@@ -19,6 +19,7 @@ using System.Linq;
 using System.Security.Claims;
 using WebApiDemo.AuthorizationHandlers;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 namespace WebApiDemo
 {
@@ -76,8 +77,12 @@ namespace WebApiDemo
 
             // cache in memory
             services.AddMemoryCache();
+
             // caching response for middlewares
             services.AddResponseCaching();
+
+            // Automapper
+            services.AddAutoMapper();
 
             // mvc + validating
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddFluentValidation();
