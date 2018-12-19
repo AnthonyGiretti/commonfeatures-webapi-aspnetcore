@@ -134,8 +134,8 @@ namespace WebApiDemo
                 app.UseDeveloperExceptionPage();
             }
 
-            // caching response for middlewares
-            app.UseResponseCaching();
+            // caching all response that resturn 200 ok
+            //app.UseResponseCaching();
 
             // profiling, url to see last profile check: http://localhost:62258/profiler/results
             app.UseMiniProfiler();
@@ -164,7 +164,7 @@ namespace WebApiDemo
             app.UseMiddleware<CustomExceptionMiddleware>();
 
             // mini profiler 
-            app.UseMiddleware<MiniProfilerMiddleware>();
+            //app.UseMiddleware<MiniProfilerMiddleware>();
 
             app.UseMvc();
         }
