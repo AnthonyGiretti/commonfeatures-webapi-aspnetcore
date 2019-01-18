@@ -20,6 +20,9 @@ using System.Security.Claims;
 using WebApiDemo.AuthorizationHandlers;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
+using WebApiDemo.Repositories;
+using ImpromptuInterface;
+using WebApiDemo.Services;
 
 namespace WebApiDemo
 {
@@ -76,15 +79,12 @@ namespace WebApiDemo
             services.AddSingleton<IValidator<User>, UserValidator>();
 
             // Repositories
-            //services.AddScoped<>();
-
-            /*
-             services.TryAddScoped<ISdkOrganizationServiceFactory>(c =>
+             services.AddScoped<IMyRepository>(c =>
             {
-                var connectionString = c.GetService<IConfiguration>()["ConnectionString:Crm"];
-                return new SdkOrganizationServiceFactory(connectionString);
+                var config = new { ConnectionString = c.GetService<IConfiguration>()["ConnectionStrings:MyDatabase"] } ;
+                return new MyRepository(config.ActLike<IConfig>());
             });
-             * */
+
 
             // cache in memory
             services.AddMemoryCache();
