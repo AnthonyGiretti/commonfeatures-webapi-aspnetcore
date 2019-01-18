@@ -75,6 +75,17 @@ namespace WebApiDemo
             // Validators
             services.AddSingleton<IValidator<User>, UserValidator>();
 
+            // Repositories
+            //services.AddScoped<>();
+
+            /*
+             services.TryAddScoped<ISdkOrganizationServiceFactory>(c =>
+            {
+                var connectionString = c.GetService<IConfiguration>()["ConnectionString:Crm"];
+                return new SdkOrganizationServiceFactory(connectionString);
+            });
+             * */
+
             // cache in memory
             services.AddMemoryCache();
 
