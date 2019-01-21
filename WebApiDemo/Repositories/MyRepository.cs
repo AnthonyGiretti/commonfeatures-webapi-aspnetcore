@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApiDemo.Models;
+﻿using WebApiDemo.Models;
 using WebApiDemo.Services;
 
 namespace WebApiDemo.Repositories
@@ -18,6 +14,8 @@ namespace WebApiDemo.Repositories
 
         public UserEntity GetUserById(int id)
         {
+            // code to get data here.....
+
             return new UserEntity();
         }
     }
