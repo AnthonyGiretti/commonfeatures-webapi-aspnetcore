@@ -145,15 +145,32 @@ namespace WebApiDemo
 
             // Tenant Services
             TypesToRegister.ForEach(x => services.AddScoped(x));
-
+            AddScopedDynamic<ITenantService>(services);
+            /*
             services.AddScoped<Func<string, ITenantService>>(serviceProvider => tenant =>
             {
-                var type = TypesToRegister.Where(x => x.Name == $"{tenant}Service").FirstOrDefault();
+                var type = TypesToRegister.Where(y => y.GetInterfaces().Contains(typeof(ITenantService)))
+                                          .Where(x => x.Name.Contains(tenant))
+                                          .FirstOrDefault();
                 if (null == type)
                     throw new KeyNotFoundException("Aucune instance trouvée pour le tenant fournit.");
 
                 return (ITenantService)serviceProvider.GetService(type);
-            });  
+            });*/
+        }
+
+        private void AddScopedDynamic<T>(IServiceCollection services)
+        {
+            services.AddScoped<Func<string, T>>(serviceProvider => tenant =>
+            {
+                var type = TypesToRegister.Where(y => y.GetInterfaces().Contains(typeof(T)))
+                                          .Where(x => x.Name.Contains(tenant))
+                                          .FirstOrDefault();
+                if (null == type)
+                    throw new KeyNotFoundException("Aucune instance trouvée pour le tenant fournit.");
+
+                return (T)serviceProvider.GetService(type);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
