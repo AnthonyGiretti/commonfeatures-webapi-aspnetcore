@@ -23,6 +23,7 @@ using AutoMapper;
 using WebApiDemo.Repositories;
 using ImpromptuInterface;
 using WebApiDemo.Services;
+using WebApiDemo.Services.Tenants;
 
 namespace WebApiDemo
 {
@@ -33,9 +34,15 @@ namespace WebApiDemo
             // Init Serilog configuration
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             Configuration = configuration;
+            TypesToRegister = Assembly.Load("WebApiDemo").GetTypes()
+                                .Where(x => !string.IsNullOrEmpty(x.Namespace))
+                                .Where(x => x.IsClass)
+                                .Where(x => x.Namespace.StartsWith("WebApiDemo.Services.Tenants")).ToList();
         }
 
         public IConfiguration Configuration { get; }
+
+        public List<Type> TypesToRegister { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -135,6 +142,18 @@ namespace WebApiDemo
             services.AddMiniProfiler(options =>
                 options.RouteBasePath = "/profiler"
             );
+
+            // Tenant Services
+            TypesToRegister.ForEach(x => services.AddScoped(x));
+
+            services.AddScoped<Func<string, ITenantService>>(serviceProvider => tenant =>
+            {
+                var type = TypesToRegister.Where(x => x.Name == $"{tenant}Service").FirstOrDefault();
+                if (null == type)
+                    throw new KeyNotFoundException("Aucune instance trouvée pour le tenant fournit.");
+
+                return (ITenantService)serviceProvider.GetService(type);
+            });  
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
