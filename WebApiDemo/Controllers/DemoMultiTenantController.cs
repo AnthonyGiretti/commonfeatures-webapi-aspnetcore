@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using WebApiDemo.Providers;
 using WebApiDemo.Services.Tenants;
 
 namespace WebApiDemo.Controllers
@@ -8,9 +9,9 @@ namespace WebApiDemo.Controllers
     [ApiController]
     public class DemoMultiTenantController : ControllerBase
     {
-        private Func<string, ITenantService> _tenantServiceProvider;
+        private IServicesProvider<ITenantService> _tenantServiceProvider;
 
-        public DemoMultiTenantController(Func<string, ITenantService> tenantServiceProvider)
+        public DemoMultiTenantController(IServicesProvider<ITenantService> tenantServiceProvider)
         {
             _tenantServiceProvider = tenantServiceProvider;
         }
@@ -19,7 +20,7 @@ namespace WebApiDemo.Controllers
         [HttpGet("{tenant}", Name = "Get")]
         public string Get(string tenant)
         {
-            return _tenantServiceProvider(tenant).GetName();
+            return _tenantServiceProvider.GetInstance(tenant).GetName();
         }
     }
 }

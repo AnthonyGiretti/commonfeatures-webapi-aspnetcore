@@ -25,6 +25,7 @@ using ImpromptuInterface;
 using WebApiDemo.Services;
 using WebApiDemo.Services.Tenants;
 using WebApiDemo.Extensions;
+using WebApiDemo.Providers;
 
 namespace WebApiDemo
 {
@@ -146,7 +147,10 @@ namespace WebApiDemo
 
             // Tenant Services
             TypesToRegister.ForEach(x => services.AddScoped(x));
-            services.AddScopedDynamic<ITenantService>(TypesToRegister);  
+            services.AddScopedDynamic<ITenantService>(TypesToRegister);
+
+            // Global Service provider
+            services.AddScoped(typeof(IServicesProvider<>), typeof(ServicesProvider<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
