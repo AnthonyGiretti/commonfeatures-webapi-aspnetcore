@@ -15,7 +15,8 @@ namespace WebApiDemo.Controllers
             _tenantServiceProvider = tenantServiceProvider;
         }
 
-        // GET: api/DemoMultiTenant/5
+        // GET: api/DemoMultiTenant/Tenant1
+        // GET: api/DemoMultiTenant/Tenant2
         [HttpGet("{tenant}", Name = "Get")]
         public string Get(string tenant)
         {
