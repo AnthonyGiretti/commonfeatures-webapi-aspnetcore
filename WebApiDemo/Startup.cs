@@ -36,10 +36,11 @@ namespace WebApiDemo
             // Init Serilog configuration
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             Configuration = configuration;
-            TypesToRegister = Assembly.Load("WebApiDemo").GetTypes()
-                                .Where(x => !string.IsNullOrEmpty(x.Namespace))
-                                .Where(x => x.IsClass)
-                                .Where(x => x.Namespace.StartsWith("WebApiDemo.Services.Tenants")).ToList();
+            TypesToRegister = Assembly.Load("WebApiDemo")
+                                      .GetTypes()
+                                      .Where(x => !string.IsNullOrEmpty(x.Namespace))
+                                      .Where(x => x.IsClass)
+                                      .Where(x => x.Namespace.StartsWith("WebApiDemo.Services.Tenants")).ToList();
         }
 
         public IConfiguration Configuration { get; }
