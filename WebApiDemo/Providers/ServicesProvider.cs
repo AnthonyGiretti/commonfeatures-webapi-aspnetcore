@@ -17,8 +17,13 @@ namespace WebApiDemo.Providers
 
         public TInterface GetInstance(string key)
         {
-            var func = (Func<string, TInterface>)_httpContextAccessor.HttpContext.RequestServices.GetService(typeof(Func<string, TInterface>));
+            var func = this.GetService();
             return func(key);
+        }
+
+        private Func<string, TInterface> GetService()
+        {
+            return (Func<string, TInterface>)_httpContextAccessor.HttpContext.RequestServices.GetService(typeof(Func<string, TInterface>));
         }
     }
 }

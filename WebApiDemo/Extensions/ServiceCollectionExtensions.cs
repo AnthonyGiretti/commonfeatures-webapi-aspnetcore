@@ -16,7 +16,7 @@ namespace WebApiDemo.Extensions
                                 .FirstOrDefault();
 
                 if (null == type)
-                    throw new KeyNotFoundException("Aucune instance trouvée pour le tenant fournit.");
+                    throw new KeyNotFoundException("No instance found for the given tenant.");
 
                 return (TInterface)serviceProvider.GetService(type);
             });
