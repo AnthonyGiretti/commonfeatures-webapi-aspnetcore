@@ -1,6 +1,9 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using FluentValidation.AspNetCore;
+using ImpromptuInterface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,21 +14,17 @@ using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using WebApiDemo.AuthorizationHandlers;
+using WebApiDemo.Extensions;
 using WebApiDemo.Middlewares;
 using WebApiDemo.Models;
-using WebApiDemo.Validators;
-using System.Linq;
-using System.Security.Claims;
-using WebApiDemo.AuthorizationHandlers;
-using Microsoft.AspNetCore.Authorization;
-using AutoMapper;
+using WebApiDemo.Providers;
 using WebApiDemo.Repositories;
-using ImpromptuInterface;
 using WebApiDemo.Services;
 using WebApiDemo.Services.Tenants;
-using WebApiDemo.Extensions;
-using WebApiDemo.Providers;
+using WebApiDemo.Validators;
 
 namespace WebApiDemo
 {
@@ -147,7 +146,9 @@ namespace WebApiDemo
             );
 
             // Tenant Services
+            // Classes to register
             TypesToRegister.ForEach(x => services.AddScoped(x));
+            // Multitenant interface with its related classes
             services.AddScopedDynamic<ITenantService>(TypesToRegister);
 
             // Global Service provider
