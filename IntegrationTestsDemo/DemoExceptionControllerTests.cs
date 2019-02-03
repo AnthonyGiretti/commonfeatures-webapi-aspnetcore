@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using WebApiDemo.Models;
 using Xunit;
@@ -40,6 +39,7 @@ namespace IntegrationTestsDemo
                 .MediaType
                 .Should()
                 .Be("application/json");
+
             }
 
         }
