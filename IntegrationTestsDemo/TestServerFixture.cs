@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using System;
-using System.IO;
 using System.Net.Http;
 using WebApiDemo;
 
@@ -15,7 +14,6 @@ namespace IntegrationTestsDemo
         public TestServerFixture()
         {
             var builder = new WebHostBuilder()
-                   //.UseContentRoot(@"E:\Codes sources\Commonfeatures-webapi-aspnetcore\WebApiDemo")
                    .UseEnvironment("Development")
                    .UseStartup<Startup>();
 
@@ -23,13 +21,6 @@ namespace IntegrationTestsDemo
             Client = _testServer.CreateClient();
 
         }
-
-        //private string GetContentRootPath()
-        //{
-        //    var testProjectPath = PlatformServices.Default.Application.ApplicationBasePath;
-        //    var relativePathToHostProject = @"WebApiDemo";
-        //    return Path.Combine(testProjectPath, relativePathToHostProject);
-        //}
 
         public void Dispose()
         {
