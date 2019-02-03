@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using WebApiDemo;
 using WebApiDemo.Middlewares;
 using WebApiDemo.Models;
 using Xunit;
@@ -18,7 +17,7 @@ namespace UnitTestsDemo
     public class CustomExceptionMiddlewareTests
     {
         [Fact]
-        public async Task WhenAGenericExceptionIsRaised_CustomExceptionMiddlewareShouldHandleItToDefaultErrorResponseAndLoggerCalled()
+        public async Task WhenAGenericExceptionIsRaised_CustomExceptionMiddlewareShouldHandleItToProperErrorResponseAndLoggerCalled()
         {
             // Arrange
             var loggerMock = Substitute.For<ILogger<CustomExceptionMiddleware>>();
