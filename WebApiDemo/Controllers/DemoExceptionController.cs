@@ -1,10 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace WebApiDemo.Controllers
 {
@@ -12,19 +8,14 @@ namespace WebApiDemo.Controllers
     [ApiController]
     public class DemoExceptionController : ControllerBase
     {
-        private readonly ILogger<DemoExceptionController> _logger;
-
-        public DemoExceptionController(ILogger<DemoExceptionController> logger)
+        public DemoExceptionController()
         {
-            _logger = logger;
         }
 
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            _logger.LogInformation("Could break here :(");
-            throw new Exception("bohhhh very bad error");
-
+            throw new Exception("bouhhhh quelle affreuse erreur!");
             return new string[] { "value1", "value2" };
         }
 
