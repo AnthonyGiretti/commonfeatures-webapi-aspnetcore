@@ -157,7 +157,11 @@ namespace WebApiDemo
             services.AddHealthChecks();
 
             // Typed httpclient
-            services.AddHttpClient<IDataClient, DataClient>().AddPolicyHandlers("PolicyConfig", LoggerFactory, Configuration);
+            services.AddHttpClient<IDataClient, DataClient>(client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:56190/api/");
+            })
+            .AddPolicyHandlers("PolicyConfig", LoggerFactory, Configuration);
 
             // Tenant Services
             // Classes to register

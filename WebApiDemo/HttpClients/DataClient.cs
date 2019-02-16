@@ -17,7 +17,7 @@ namespace WebApiDemo.HttpClients
 
         public async Task<object> GetData()
         {
-            return (await _client.GetAsync("http://localhost:56190/api/DemoException/error")).Content.ReadAsStringAsync();
+            return (await _client.GetAsync("DemoException/error")).Content.ReadAsStringAsync();
         }
     }
 }
