@@ -163,6 +163,11 @@ namespace WebApiDemo
             })
             .AddPolicyHandlers("PolicyConfig", LoggerFactory, Configuration);
 
+            services.AddHttpClient<IStreamingClient, StreamingClient>(client =>
+            {
+                client.BaseAddress = new Uri("https://anthonygiretti.blob.core.windows.net/videos/");
+            });
+
             // Tenant Services
             // Classes to register
             TypesToRegister.ForEach(x => services.AddScoped(x));
