@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly.CircuitBreaker;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -41,6 +42,17 @@ namespace WebApiDemo.Middlewares
 
             response.ContentType = "application/json";
             response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            // Custom Exception
+            if (exception?.InnerException is BrokenCircuitException)
+            {
+                exception = exception.InnerException;
+            }
+            if (exception is BrokenCircuitException)
+            {
+                response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                message = exception.Message;
+            }
 
             // log generic exception message (original error)
             _logger.LogError(exception, exception.Message);

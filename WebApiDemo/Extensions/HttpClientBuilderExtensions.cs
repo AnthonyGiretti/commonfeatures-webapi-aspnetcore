@@ -14,7 +14,7 @@ namespace WebApiDemo.Extensions
             var circuitBreakerLogger = loggerFactory.CreateLogger("PollyHttpCircuitBreakerPoliciesLogger");
 
             var policyConfig = new PolicyConfig();
-            configuration.Bind("PolicyConfig", policyConfig);
+            configuration.Bind(policySectionName, policyConfig);
 
             var circuitBreakerPolicyConfig = (ICircuitBreakerPolicyConfig)policyConfig;
             var retryPolicyConfig = (IRetryPolicyConfig)policyConfig;

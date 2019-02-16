@@ -18,6 +18,7 @@ using System.Linq;
 using System.Reflection;
 using WebApiDemo.AuthorizationHandlers;
 using WebApiDemo.Extensions;
+using WebApiDemo.HttpClients;
 using WebApiDemo.Middlewares;
 using WebApiDemo.Models;
 using WebApiDemo.Providers;
@@ -30,11 +31,13 @@ namespace WebApiDemo
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             // Init Serilog configuration
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             Configuration = configuration;
+            LoggerFactory = loggerFactory;
+
             TypesToRegister = Assembly.Load("WebApiDemo")
                                       .GetTypes()
                                       .Where(x => !string.IsNullOrEmpty(x.Namespace))
@@ -43,6 +46,8 @@ namespace WebApiDemo
         }
 
         public IConfiguration Configuration { get; }
+
+        public ILoggerFactory LoggerFactory { get; }
 
         public List<Type> TypesToRegister { get; }
 
@@ -144,6 +149,9 @@ namespace WebApiDemo
             services.AddMiniProfiler(options =>
                 options.RouteBasePath = "/profiler"
             );
+
+            // Typed httpclient
+            services.AddHttpClient<IDataClient, DataClient>().AddPolicyHandlers("PolicyConfig", LoggerFactory, Configuration);
 
             // Tenant Services
             // Classes to register

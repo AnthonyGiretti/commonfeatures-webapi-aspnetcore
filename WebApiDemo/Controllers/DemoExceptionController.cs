@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 
@@ -19,5 +20,10 @@ namespace WebApiDemo.Controllers
             return new string[] { "value1", "value2" };
         }
 
+        [HttpGet("error")]
+        public IActionResult GetError()
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable);
+        }
     }
 }

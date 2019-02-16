@@ -9,8 +9,7 @@ namespace WebApiDemo.RetryPolicies
     {
         public static PolicyBuilder<HttpResponseMessage> GetDefaultBuilder()
         {
-            return HttpPolicyExtensions.HandleTransientHttpError()
-                                       .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound);
+            return HttpPolicyExtensions.HandleTransientHttpError();
         }
     }
 }
