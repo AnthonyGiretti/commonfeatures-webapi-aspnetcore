@@ -150,6 +150,9 @@ namespace WebApiDemo
                 options.RouteBasePath = "/profiler"
             );
 
+            // Healthcheck
+            services.AddHealthChecks();
+
             // Typed httpclient
             services.AddHttpClient<IDataClient, DataClient>().AddPolicyHandlers("PolicyConfig", LoggerFactory, Configuration);
 
@@ -199,6 +202,9 @@ namespace WebApiDemo
 
             // global exception handling
             app.UseMiddleware<CustomExceptionMiddleware>();
+
+            // Healthcheck
+            app.UseHealthChecks("/health");
 
             // mini profiler 
             //app.UseMiddleware<MiniProfilerMiddleware>();
