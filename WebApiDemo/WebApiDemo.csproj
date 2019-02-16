@@ -5,10 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Files\test.sql" />
     <None Remove="SwaggerIndex.html" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Files\test.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="SwaggerIndex.html" />
   </ItemGroup>
 

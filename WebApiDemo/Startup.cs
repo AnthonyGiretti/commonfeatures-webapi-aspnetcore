@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -17,6 +18,7 @@ using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using WebApiDemo.AuthorizationHandlers;
@@ -168,6 +170,21 @@ namespace WebApiDemo
                 client.BaseAddress = new Uri("https://anthonygiretti.blob.core.windows.net/videos/");
             });
 
+            // Compression
+            services.AddResponseCompression(options =>
+            {
+                options.Providers.Add<GzipCompressionProvider>();
+                options.EnableForHttps = true;
+                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/x-sql", "video/mp4" });
+            });
+
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Optimal;
+            });
+            
+            
+
             // Tenant Services
             // Classes to register
             TypesToRegister.ForEach(x => services.AddScoped(x));
@@ -225,6 +242,9 @@ namespace WebApiDemo
                     [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
                 }
             });
+
+            // Compression
+            app.UseResponseCompression();
 
             // mini profiler 
             //app.UseMiddleware<MiniProfilerMiddleware>();
