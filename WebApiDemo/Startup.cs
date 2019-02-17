@@ -182,8 +182,9 @@ namespace WebApiDemo
             {
                 options.Level = CompressionLevel.Optimal;
             });
-            
-            
+
+            // Api versionning
+            services.AddApiVersioning();
 
             // Tenant Services
             // Classes to register
