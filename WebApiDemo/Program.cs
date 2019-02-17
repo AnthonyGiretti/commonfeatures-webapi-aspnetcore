@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Serilog;
 
 namespace WebApiDemo
@@ -20,6 +15,16 @@ namespace WebApiDemo
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                    .ConfigureAppConfiguration((context, config) =>
+                    {         
+                        
+                        var builtConfig = config.Build();
+                        config.AddAzureKeyVault(
+                            $"https://{builtConfig["KeyVault:Vault"]}.vault.azure.net/",
+                            builtConfig["KeyVault:ClientId"],
+                            builtConfig["KeyVault:ClientSecret"],
+                            new DefaultKeyVaultSecretManager());
+                    })
                 .UseApplicationInsights()
                 .UseStartup<Startup>()
                 .UseSerilog();
