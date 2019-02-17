@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <ApplicationInsightsResourceId>/subscriptions/38c83fd2-7d08-47a6-9bd6-8e3b04b298bd/resourcegroups/Demos/providers/microsoft.insights/components/DemoWebAPI</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/38c83fd2-7d08-47a6-9bd6-8e3b04b298bd/resourcegroups/Demos/providers/microsoft.insights/components/DemoWebAPI</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +27,8 @@
     <PackageReference Include="FluentValidation" Version="8.1.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.1.1" />
     <PackageReference Include="ImpromptuInterface" Version="7.0.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.6.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.9.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
@@ -40,6 +44,10 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>
