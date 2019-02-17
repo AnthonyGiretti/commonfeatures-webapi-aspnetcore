@@ -8,38 +8,43 @@ using Xunit;
 
 namespace IntegrationTestsDemo
 {
-    public class DemoExceptionControllerTests
+    public class DemoExceptionControllerTests : IClassFixture<WebApiTestsFactory>
     {
+        private readonly WebApiTestsFactory _factory;
+
+        public DemoExceptionControllerTests(WebApiTestsFactory factory)
+        {
+            _factory = factory;
+        }
+
         [Fact]
         public async Task WhenGetMethodRaiseAnException_WebAPIShouldHandleItandAnswerAProperErrorObjectAndStatusError500()
         {
-            //Arrange
-            using (TestServerFixture fixture = new TestServerFixture())
-            {
-                // Act
-                var response = await fixture.Client.GetAsync("/api/DemoException");
+            // Arrange
+            var httpClient = _factory.CreateClient();
+            // Act
+            var response = await httpClient.GetAsync("/api/DemoException");
 
-                // Assert
-                var responseData = await response
-                .Content
-                .ReadAsAsync<Error>();
+            // Assert
+            var responseData = await response
+            .Content
+            .ReadAsAsync<Error>();
 
-                responseData
-                .Should()
-                .BeEquivalentTo(new Error { Message = "Unhandled error", Errors = new List<string>(), Code = "00009" });
+            responseData
+            .Should()
+            .BeEquivalentTo(new Error { Message = "Unhandled error", Errors = new List<string>(), Code = "00009" });
 
-                response.StatusCode
-                .Should()
-                .Be((int)HttpStatusCode.InternalServerError);
+            response.StatusCode
+            .Should()
+            .Be((int)HttpStatusCode.InternalServerError);
 
-                response
-                .Content
-                .Headers
-                .ContentType
-                .MediaType
-                .Should()
-                .Be("application/json");
-            }
+            response
+            .Content
+            .Headers
+            .ContentType
+            .MediaType
+            .Should()
+            .Be("application/json");
         }    
     }
 }
