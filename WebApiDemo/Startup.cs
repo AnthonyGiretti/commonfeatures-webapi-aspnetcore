@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -100,7 +101,7 @@ namespace WebApiDemo
             // Repositories
              services.AddScoped<IMyRepository>(c =>
             {
-                var config = new { ConnectionString = c.GetService<IConfiguration>()["ConnectionStrings:MyDatabase"] } ;
+                var config = new { ConnectionString = c.GetService<IConfiguration>()["MySecretConnectionString"] } ; // <-- from Azure Keyvault
                 return new MyRepository(config.ActLike<IConfig>());
             });
 
@@ -184,7 +185,10 @@ namespace WebApiDemo
             });
 
             // Api versionning
-            services.AddApiVersioning();
+            services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+            });
 
             // Tenant Services
             // Classes to register

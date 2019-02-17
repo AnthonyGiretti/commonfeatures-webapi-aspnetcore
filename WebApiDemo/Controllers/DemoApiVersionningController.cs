@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApiDemo.Controllers
 {
-    [ApiVersion("1.0")]
+    [ApiVersion("1.0", Deprecated = true)]
     [ApiVersion("1.1")]
-    [Route("api/{version:apiVersion}/home")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class DemoApiVersionningController : ControllerBase
     {
@@ -18,8 +14,8 @@ namespace WebApiDemo.Controllers
 
         }
 
-        [HttpGet, MapToApiVersion("1.0")]
-        public IActionResult Get1()
+        [HttpGet]
+        public IActionResult Get1(string version)
         {
             return Ok(HttpContext.GetRequestedApiVersion().ToString());
         }
@@ -32,7 +28,7 @@ namespace WebApiDemo.Controllers
     }
 
     [ApiVersion("2.0")]
-    [Route("api/{version:apiVersion}/home")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class DemoApiVersionningV2Controller : ControllerBase
     {

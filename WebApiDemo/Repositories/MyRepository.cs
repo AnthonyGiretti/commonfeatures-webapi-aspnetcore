@@ -15,7 +15,7 @@ namespace WebApiDemo.Repositories
         public UserEntity GetUserById(int id)
         {
             // code to get data here.....
-
+            var connectionString = _config.ConnectionString;
             return new UserEntity();
         }
     }

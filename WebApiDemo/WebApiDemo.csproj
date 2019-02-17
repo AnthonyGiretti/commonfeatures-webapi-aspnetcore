@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\DemoKeyVaultController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Files\test.sql" />
     <None Remove="SwaggerIndex.html" />
   </ItemGroup>
