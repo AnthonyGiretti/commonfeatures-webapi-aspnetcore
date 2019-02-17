@@ -188,6 +188,8 @@ namespace WebApiDemo
             services.AddApiVersioning(options =>
             {
                 options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
             });
 
             // Tenant Services

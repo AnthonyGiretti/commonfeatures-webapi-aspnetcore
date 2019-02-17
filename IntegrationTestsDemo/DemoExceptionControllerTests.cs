@@ -39,11 +39,7 @@ namespace IntegrationTestsDemo
                 .MediaType
                 .Should()
                 .Be("application/json");
-
             }
-
-        }
-
-       
+        }    
     }
 }
