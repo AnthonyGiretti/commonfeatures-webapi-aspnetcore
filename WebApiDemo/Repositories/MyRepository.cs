@@ -12,11 +12,9 @@ namespace WebApiDemo.Repositories
             _config = config;
         }
 
-        public UserEntity GetUserById(int id)
+        public string GetConnectionString()
         {
-            // code to get data here.....
-            var connectionString = _config.ConnectionString;
-            return new UserEntity();
+            return _config.ConnectionString;
         }
     }
 }

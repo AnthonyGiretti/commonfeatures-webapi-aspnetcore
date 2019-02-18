@@ -5,12 +5,10 @@ namespace WebApiDemo.Services.Tenants.Tenant1
 {
     public class Tenant1Service : ITenantService
     {
-        private IMyRepository _myRepository;
         private Guid _guid;
 
-        public Tenant1Service(IMyRepository myRepository)
+        public Tenant1Service()
         {
-            _myRepository = myRepository;
             _guid = Guid.NewGuid();
         }
 

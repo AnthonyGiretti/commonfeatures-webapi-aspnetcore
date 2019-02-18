@@ -12,11 +12,8 @@ namespace WebApiDemo.Controllers
     [ApiController]
     public class DemoConfigController : ControllerBase
     {
-        // GET: api/DemoConfig
-        [HttpGet("{id}")]
-        public IActionResult Get(int id, [FromServices] IMyRepository repository)
+        public IActionResult Get([FromServices] ICountryRepository repository)
         {
-            var entity = repository.GetUserById(id);
             return Ok();
         }
     }

@@ -23,6 +23,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using WebApiDemo.AuthorizationHandlers;
+using WebApiDemo.Database;
 using WebApiDemo.Extensions;
 using WebApiDemo.HttpClients;
 using WebApiDemo.Middlewares;
@@ -32,17 +33,20 @@ using WebApiDemo.Repositories;
 using WebApiDemo.Services;
 using WebApiDemo.Services.Tenants;
 using WebApiDemo.Validators;
+using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApiDemo
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             // Init Serilog configuration
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             Configuration = configuration;
             LoggerFactory = loggerFactory;
+            ServiceProvider = serviceProvider;
 
             TypesToRegister = Assembly.Load("WebApiDemo")
                                       .GetTypes()
@@ -54,6 +58,8 @@ namespace WebApiDemo
         public IConfiguration Configuration { get; }
 
         public ILoggerFactory LoggerFactory { get; }
+
+        public IServiceProvider ServiceProvider { get; }
 
         public List<Type> TypesToRegister { get; }
 
@@ -98,13 +104,23 @@ namespace WebApiDemo
             // Validators
             services.AddSingleton<IValidator<User>, UserValidator>();
 
-            // Repositories
-             services.AddScoped<IMyRepository>(c =>
-            {
-                var config = new { ConnectionString = c.GetService<IConfiguration>()["MySecretConnectionString"] } ; // <-- from Azure Keyvault
-                return new MyRepository(config.ActLike<IConfig>());
-            });
+            // Repositories + EF
+            var config = new {
+                ConnectionString = ServiceProvider.GetService<IConfiguration>()["MySecretConnectionString"]
+            }
+            .ActLike<IConfig>(); // <-- from Azure Keyvault
 
+            //services.AddScoped<IMyRepository>(c =>
+            //{
+            //    return new MyRepository(config);
+            //});
+
+            services.AddScoped<ICountryRepository>(c =>
+            {
+                return new OrmLiteCountryRepository(config);
+            });
+            services.AddDbContext<DemoDbContext>(options => options.UseSqlServer(config.ConnectionString));
+            //services.AddScoped<ICountryRepository, EFCountryRepository>();
 
             // cache in memory
             services.AddMemoryCache();
