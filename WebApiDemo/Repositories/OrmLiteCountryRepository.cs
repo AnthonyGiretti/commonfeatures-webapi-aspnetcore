@@ -1,5 +1,7 @@
 ﻿using ServiceStack.OrmLite;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApiDemo.Models;
@@ -7,63 +9,52 @@ using WebApiDemo.Services;
 
 namespace WebApiDemo.Repositories
 {
-    public class OrmLiteCountryRepository : ICountryRepository
+    public class OrmLiteCountryRepository : ICountryRepository, IDisposable
     {
-        private OrmLiteConnectionFactory _connectionFactory;
+        private IDbConnection _connection;
         public OrmLiteCountryRepository(IConfig config)
         {
-            _connectionFactory = new OrmLiteConnectionFactory(config.ConnectionString, SqlServer2014Dialect.Provider);
+            _connection = new OrmLiteConnectionFactory(config.ConnectionString, SqlServer2014Dialect.Provider).OpenDbConnection();
         }
 
         public async Task<List<Country>> Get()
         {
-            using (var connection = _connectionFactory.OpenDbConnection())
-            {
-                return (await connection.SelectAsync<Country>()).ToList();
-            }
+            return (await _connection.SelectAsync<Country>()).ToList();
         }
 
         public async Task<Country> GetById(int countryId)
         {
-            using (var connection = _connectionFactory.OpenDbConnection())
-            {
-                return (await connection.SelectAsync<Country>(x=> x.CountryId == countryId)).FirstOrDefault();
-            }
+            return (await _connection.SelectAsync<Country>(x=> x.CountryId == countryId)).FirstOrDefault();
         }
 
         public async Task<long> Add(Country country)
         {
-            using (var connection = _connectionFactory.OpenDbConnection())
-            {
-                return await connection.InsertAsync(country, selectIdentity: true);
-            }
+            return await _connection.InsertAsync(country, selectIdentity: true);
         }
 
         public async Task<int> Update(Country country)
         {
-            using (var connection = _connectionFactory.OpenDbConnection())
-            {
-                return await connection.UpdateAsync(country);
-            }
+            return await _connection.UpdateAsync(country);
         }
 
         public async Task<int> UpdateDescription(int countryId, string description)
         {
-            using (var connection = _connectionFactory.OpenDbConnection())
+            return await _connection.UpdateOnlyAsync(() => new Country
             {
-                return await connection.UpdateOnlyAsync(() => new Country
-                {
-                    Description = "description"
-                }, where: p => p.CountryId == countryId);
-            }
+                Description = "description"
+            }, where: p => p.CountryId == countryId);
+            
         }
 
         public async Task<int> Delete(int countryId)
         {
-            using (var connection = _connectionFactory.OpenDbConnection())
-            {
-                return await connection.DeleteAsync<Country>(x => x.CountryId == countryId);
-            }
+            return await _connection.DeleteAsync<Country>(x => x.CountryId == countryId);
+        }
+
+        public void Dispose()
+        {
+            if (null != _connection)
+                _connection.Dispose();
         }
     }
 }
