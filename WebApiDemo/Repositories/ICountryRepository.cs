@@ -6,11 +6,11 @@ namespace WebApiDemo.Repositories
 {
     public interface ICountryRepository
     {
-        Task<List<Country>> Get();
-        Task<Country> GetById(int countryId);
-        Task<long> Add(Country country);
-        Task<int> Update(Country country);
-        Task<int> UpdateDescription(int countryId, string description);
-        Task<int> Delete(int countryId);
+        Task<List<Country>> GetAsync();
+        Task<Country> GetByIdAsync(int countryId);
+        Task<long> AddAsync(Country country);
+        Task<int> UpdateAsync(Country country);
+        Task<int> UpdateDescriptionAsync(int countryId, string description);
+        Task<int> DeleteAsync(int countryId);
     }
 }
