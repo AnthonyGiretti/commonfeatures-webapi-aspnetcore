@@ -9,6 +9,7 @@ namespace WebApiDemo.Models
     public class Country
     {
         [PrimaryKey]
+        [AutoIncrement]
         public int CountryId { get; set; }
         public string CountryName { get; set; }
         public string Description { get; set; }

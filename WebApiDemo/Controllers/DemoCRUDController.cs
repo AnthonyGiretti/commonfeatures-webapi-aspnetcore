@@ -42,9 +42,9 @@ namespace WebApiDemo.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Put(int countryId, Country country)
+        public async Task<IActionResult> Put(int id, Country country)
         {
-            var affectedItem = await _countryRepository.UpdateAsync(countryId, country);
+            var affectedItem = await _countryRepository.UpdateAsync(id, country);
             if (affectedItem > 0)
                 return NoContent();
 
@@ -52,9 +52,9 @@ namespace WebApiDemo.Controllers
         }
 
         [HttpPatch("update/{id}/description")]
-        public async Task<IActionResult> Patch(int countryId, [FromBody] string description)
+        public async Task<IActionResult> Patch(int id, [FromBody]string description)
         {
-            var affectedItem = await _countryRepository.UpdateDescriptionAsync(countryId, description);
+            var affectedItem = await _countryRepository.UpdateDescriptionAsync(id, description);
             if (affectedItem > 0)
                 return NoContent();
 

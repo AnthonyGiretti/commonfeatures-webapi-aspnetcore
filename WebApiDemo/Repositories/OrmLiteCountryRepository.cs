@@ -14,7 +14,7 @@ namespace WebApiDemo.Repositories
         private IDbConnection _connection;
         public OrmLiteCountryRepository(IConfig config)
         {
-            _connection = new OrmLiteConnectionFactory(config.ConnectionString, SqlServer2014Dialect.Provider).OpenDbConnection();
+            _connection = new OrmLiteConnectionFactory(config.ConnectionString, SqlServer2016Dialect.Provider).OpenDbConnection();
         }
 
         public async Task<List<Country>> GetAsync()
@@ -34,14 +34,15 @@ namespace WebApiDemo.Repositories
 
         public async Task<int> UpdateAsync(int countryId, Country country)
         {
-            return await _connection.UpdateAsync(country, where: p=> p.CountryId == countryId);
+            country.CountryId = countryId;
+            return await _connection.UpdateAsync(country);
         }
 
         public async Task<int> UpdateDescriptionAsync(int countryId, string description)
         {
             return await _connection.UpdateOnlyAsync(() => new Country
             {
-                Description = "description"
+                Description = description
             }, where: p => p.CountryId == countryId);
             
         }
