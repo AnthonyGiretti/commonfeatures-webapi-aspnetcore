@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <ApplicationInsightsResourceId>/subscriptions/38c83fd2-7d08-47a6-9bd6-8e3b04b298bd/resourcegroups/Demos/providers/microsoft.insights/components/DemoWebAPI</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/38c83fd2-7d08-47a6-9bd6-8e3b04b298bd/resourcegroups/Demos/providers/microsoft.insights/components/DemoWebAPI</ApplicationInsightsAnnotationResourceId>
+    <UserSecretsId>465546e3-1d8a-4f2b-9143-8750a3f29603</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
