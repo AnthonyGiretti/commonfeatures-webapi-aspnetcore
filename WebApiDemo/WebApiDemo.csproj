@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\DemoKeyVaultController.cs" />
-    <Compile Remove="Repositories\IMyRepository.cs" />
-    <Compile Remove="Repositories\MyRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>

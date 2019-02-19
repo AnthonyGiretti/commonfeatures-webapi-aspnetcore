@@ -110,6 +110,11 @@ namespace WebApiDemo
             }
             .ActLike<IConfig>(); // <-- from Azure Keyvault
 
+            services.AddScoped<IMyRepository>(c =>
+            {
+                return new MyRepository(config);
+            });
+
             services.AddScoped<ICountryRepository>(c =>
             {
                 return new OrmLiteCountryRepository(config);

@@ -12,9 +12,9 @@ namespace WebApiDemo.Controllers
     [ApiController]
     public class DemoConfigController : ControllerBase
     {
-        public IActionResult Get([FromServices] ICountryRepository repository)
+        public IActionResult Get([FromServices] IMyRepository repository)
         {
-            return Ok();
+            return Ok(repository.GetConnectionString());
         }
     }
 }
