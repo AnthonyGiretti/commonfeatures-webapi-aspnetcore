@@ -33,10 +33,10 @@ namespace WebApiDemo.Repositories
             return country.CountryId;
         }
 
-        public async Task<int> UpdateAsync(Country country)
+        public async Task<int> UpdateAsync(int countryId, Country country)
         {
             return await _dbContext.Country
-                                    .Where(x => x.CountryId == country.CountryId)
+                                    .Where(x => x.CountryId == countryId)
                                     .UpdateAsync(x => new Country
                                     {
                                         CountryName = country.CountryName,

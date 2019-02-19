@@ -41,10 +41,10 @@ namespace WebApiDemo.Controllers
             return Created($"http://localhost:56190/api/DemoCRUD/{id}", id);
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> Put(Country country)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> Put(int countryId, Country country)
         {
-            var affectedItem = await _countryRepository.UpdateAsync(country);
+            var affectedItem = await _countryRepository.UpdateAsync(countryId, country);
             if (affectedItem > 0)
                 return NoContent();
 

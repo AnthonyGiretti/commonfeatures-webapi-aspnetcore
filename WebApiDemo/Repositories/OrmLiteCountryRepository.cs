@@ -32,9 +32,9 @@ namespace WebApiDemo.Repositories
             return await _connection.InsertAsync(country, selectIdentity: true);
         }
 
-        public async Task<int> UpdateAsync(Country country)
+        public async Task<int> UpdateAsync(int countryId, Country country)
         {
-            return await _connection.UpdateAsync(country);
+            return await _connection.UpdateAsync(country, where: p=> p.CountryId == countryId);
         }
 
         public async Task<int> UpdateDescriptionAsync(int countryId, string description)
