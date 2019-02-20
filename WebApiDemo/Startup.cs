@@ -35,6 +35,7 @@ using WebApiDemo.Services.Tenants;
 using WebApiDemo.Validators;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
+using WebApiDemo.HealthCheck;
 
 namespace WebApiDemo
 {
@@ -173,7 +174,8 @@ namespace WebApiDemo
             );
 
             // Healthcheck
-            services.AddHealthChecks();
+            services.AddHealthChecks()
+            .AddCheck("MyDatabase", new SqlConnectionHealthCheck(config.ConnectionString));
 
             // Typed httpclient
             services.AddHttpClient<IDataClient, DataClient>(client =>
