@@ -67,7 +67,7 @@ namespace WebApiDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Authentication
+            #region DemoAuthentication
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -79,8 +79,9 @@ namespace WebApiDemo
                 options.TokenValidationParameters.ValidateLifetime = true;
                 options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
             });
+            #endregion
 
-            // Autorization + policies
+            #region DemoAuthorization
             services.AddAuthorization(opts =>
             {
                 opts.AddPolicy("SurveyCreator", p =>
@@ -101,11 +102,13 @@ namespace WebApiDemo
 
             // Authorization handlers
             services.AddSingleton<IAuthorizationHandler, SuperSurveyCreatorAutorizationHandler>();
+            #endregion
 
-            // Validators
+            #region Demo Validator
             services.AddSingleton<IValidator<User>, UserValidator>();
+            #endregion
 
-            // Repositories + EF
+            #region DemoConfig
             var config = new {
                 ConnectionString = ServiceProvider.GetService<IConfiguration>()["MySecretConnectionString"]
             }
@@ -115,27 +118,40 @@ namespace WebApiDemo
             {
                 return new MyRepository(config);
             });
+            #endregion
 
+            #region DemoCRUD EF + ORMLite
             services.AddScoped<ICountryRepository>(c =>
             {
                 return new OrmLiteCountryRepository(config);
             });
             services.AddDbContext<DemoDbContext>(options => options.UseSqlServer(config.ConnectionString));
             //services.AddScoped<ICountryRepository, EFCountryRepository>();
+            #endregion
 
-            // cache in memory
+            #region DemoHealthCheck
+            services.AddHealthChecks()
+            .AddCheck("MyDatabase", new SqlConnectionHealthCheck(config.ConnectionString));
+            #endregion
+
+            #region DemoCache
             services.AddMemoryCache();
+            #endregion
 
+            #region DemoResponseCaching
             // caching response for middlewares
             services.AddResponseCaching();
+            #endregion
 
-            // Automapper
+            #region DemoMapping Automapper
             services.AddAutoMapper();
+            #endregion
 
-            // mvc + validating
+            #region MVC + FluentValidation
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddFluentValidation();
+            #endregion
 
-            // override modelstate for fluentvalidation
+            #region override modelstate for fluentvalidation
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = (context) =>
@@ -150,8 +166,9 @@ namespace WebApiDemo
                     return new BadRequestObjectResult(result);
                 };
             });
+            #endregion
 
-            // documenting
+            #region DemoDocumenting
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API + profiler integrated on top left page", Version = "v1" });
@@ -167,17 +184,15 @@ namespace WebApiDemo
                     { "Bearer", new string[] { } }
                 });
             });
+            #endregion
 
-            // profiling
+            #region DemoProfiling
             services.AddMiniProfiler(options =>
                 options.RouteBasePath = "/profiler"
             );
+            #endregion
 
-            // Healthcheck
-            services.AddHealthChecks()
-            .AddCheck("MyDatabase", new SqlConnectionHealthCheck(config.ConnectionString));
-
-            // Typed httpclient
+            #region DemoHttpClient
             services.AddHttpClient<IDataClient, DataClient>(client =>
             {
                 client.BaseAddress = new Uri("http://localhost:56190/api/");
@@ -188,8 +203,9 @@ namespace WebApiDemo
             {
                 client.BaseAddress = new Uri("https://anthonygiretti.blob.core.windows.net/videos/");
             });
+            #endregion
 
-            // Compression
+            #region DemoCompression
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<GzipCompressionProvider>();
@@ -201,16 +217,18 @@ namespace WebApiDemo
             {
                 options.Level = CompressionLevel.Optimal;
             });
+            #endregion
 
-            // Api versionning
+            #region DemoApiVersionning
             services.AddApiVersioning(options =>
             {
                 options.ReportApiVersions = true;
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.DefaultApiVersion = new ApiVersion(1, 0);
             });
+            #endregion
 
-            // Tenant Services
+            #region DemoMultiTenant
             // Classes to register
             TypesToRegister.ForEach(x => services.AddScoped(x));
             // Multitenant interface with its related classes
@@ -218,6 +236,7 @@ namespace WebApiDemo
 
             // Global Service provider
             services.AddScoped(typeof(IServicesProvider<>), typeof(ServicesProvider<>));
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -231,10 +250,12 @@ namespace WebApiDemo
             // caching all response that resturn 200 ok
             //app.UseResponseCaching();
 
+            #region MiniProfiler
             // profiling, url to see last profile check: http://localhost:62258/profiler/results
             app.UseMiniProfiler();
+            #endregion
 
-            // documenting
+            #region Documenting
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -244,20 +265,25 @@ namespace WebApiDemo
                 // this custom html has miniprofiler integration
                 c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApiDemo.SwaggerIndex.html");
             });
+            #endregion
 
-            // logging
+            #region Logging
             loggerFactory.AddSerilog();
+            #endregion
 
-            // authenticating
+            #region Authenticating
             app.UseAuthentication();
+            #endregion
 
+            #region Middlewares
             // global caching
             app.UseMiddleware<CachingMiddleware>();
 
             // global exception handling
             app.UseMiddleware<CustomExceptionMiddleware>();
+            #endregion
 
-            // Healthcheck
+            #region HealthCheck
             app.UseHealthChecks("/health", new HealthCheckOptions()
             {
                 ResultStatusCodes =
@@ -267,9 +293,11 @@ namespace WebApiDemo
                     [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
                 }
             });
+            #endregion
 
-            // Compression
+            #region Compression
             app.UseResponseCompression();
+            #endregion
 
             // mini profiler 
             //app.UseMiddleware<MiniProfilerMiddleware>();
