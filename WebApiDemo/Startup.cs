@@ -121,12 +121,12 @@ namespace WebApiDemo
             #endregion
 
             #region DemoCRUD EF + ORMLite
-            services.AddScoped<ICountryRepository>(c =>
-            {
-                return new OrmLiteCountryRepository(config);
-            });
+            //services.AddScoped<ICountryRepository>(c =>
+            //{
+            //    return new OrmLiteCountryRepository(config);
+            //});
             services.AddDbContext<DemoDbContext>(options => options.UseSqlServer(config.ConnectionString));
-            //services.AddScoped<ICountryRepository, EFCountryRepository>();
+            services.AddScoped<ICountryRepository, EFCountryRepository>();
             #endregion
 
             #region DemoHealthCheck
@@ -140,7 +140,7 @@ namespace WebApiDemo
 
             #region DemoResponseCaching
             // caching response for middlewares
-            services.AddResponseCaching();
+            //services.AddResponseCaching();
             #endregion
 
             #region DemoMapping Automapper
@@ -277,7 +277,7 @@ namespace WebApiDemo
 
             #region Middlewares
             // global caching
-            app.UseMiddleware<CachingMiddleware>();
+            //app.UseMiddleware<CachingMiddleware>();
 
             // global exception handling
             app.UseMiddleware<CustomExceptionMiddleware>();
@@ -296,7 +296,7 @@ namespace WebApiDemo
             #endregion
 
             #region Compression
-            app.UseResponseCompression();
+            //app.UseResponseCompression();
             #endregion
 
             // mini profiler 

@@ -34,7 +34,6 @@ namespace WebApiDemo.HealthCheck
             {
                 try
                 {
-                    //throw new Exception();
                     await connection.OpenAsync(cancellationToken);
 
                     if (TestQuery != null)

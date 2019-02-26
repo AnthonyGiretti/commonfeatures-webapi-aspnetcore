@@ -1,10 +1,5 @@
-﻿
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebApiDemo.Helpers;
 using WebApiDemo.HttpClients;
 
 namespace WebApiDemo.Controllers
@@ -23,16 +18,6 @@ namespace WebApiDemo.Controllers
         {
             var stream = await _streamingClient.GetStream("earth");
             return new FileStreamResult(stream, "video/mp4");
-        }
-
-        [HttpGet("download")]
-        public async Task<IActionResult> Download()
-        {
-            var stream = await _streamingClient.GetStream("earth");
-            return File(stream.ToByteArray(), "video/mp4", "earth.mp4");
-
-            /*var file = System.IO.File.ReadAllBytes("files/test.sql");
-            return File(file, "application/x-sql", "test.sql");*/
         }
     }
 }

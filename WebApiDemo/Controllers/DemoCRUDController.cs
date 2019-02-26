@@ -29,7 +29,7 @@ namespace WebApiDemo.Controllers
             var country = await _countryRepository.GetByIdAsync(id);
 
             if (null == country)
-                NotFound();
+                return NotFound();
 
             return Ok(country);
         }
