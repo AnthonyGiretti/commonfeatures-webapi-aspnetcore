@@ -14,6 +14,7 @@ namespace WebApiDemo.Controllers
             _streamingClient = streamingClient;
         }
 
+        [HttpGet]
         public async Task<FileStreamResult> Get()
         {
             var stream = await _streamingClient.GetStream("earth");

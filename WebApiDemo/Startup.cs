@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -25,6 +25,7 @@ using System.Reflection;
 using WebApiDemo.AuthorizationHandlers;
 using WebApiDemo.Database;
 using WebApiDemo.Extensions;
+using WebApiDemo.HealthCheck;
 using WebApiDemo.HttpClients;
 using WebApiDemo.Middlewares;
 using WebApiDemo.Models;
@@ -33,9 +34,6 @@ using WebApiDemo.Repositories;
 using WebApiDemo.Services;
 using WebApiDemo.Services.Tenants;
 using WebApiDemo.Validators;
-using Microsoft.EntityFrameworkCore.SqlServer;
-using Microsoft.EntityFrameworkCore;
-using WebApiDemo.HealthCheck;
 
 namespace WebApiDemo
 {
@@ -140,7 +138,7 @@ namespace WebApiDemo
 
             #region DemoResponseCaching
             // caching response for middlewares
-            //services.AddResponseCaching();
+            services.AddResponseCaching();
             #endregion
 
             #region DemoMapping Automapper
@@ -247,7 +245,7 @@ namespace WebApiDemo
                 app.UseDeveloperExceptionPage();
             }
 
-            // caching all response that resturn 200 ok
+            // CACHING all response that return 200 ok
             //app.UseResponseCaching();
 
             #region MiniProfiler
@@ -274,12 +272,12 @@ namespace WebApiDemo
             #region Authenticating
             app.UseAuthentication();
             #endregion
+          
+            #region Global caching middleware
+            app.UseMiddleware<CachingMiddleware>();
+            #endregion
 
-            #region Middlewares
-            // global caching
-            //app.UseMiddleware<CachingMiddleware>();
-
-            // global exception handling
+            #region Global exception handling middleware
             app.UseMiddleware<CustomExceptionMiddleware>();
             #endregion
 

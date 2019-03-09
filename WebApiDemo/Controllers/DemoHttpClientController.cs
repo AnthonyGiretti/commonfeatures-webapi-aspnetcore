@@ -19,6 +19,7 @@ namespace WebApiDemo.Controllers
             _dataClient = dataClient;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             var data = await _dataClient.GetData();

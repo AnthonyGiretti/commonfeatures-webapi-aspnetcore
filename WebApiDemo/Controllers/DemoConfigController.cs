@@ -7,6 +7,7 @@ namespace WebApiDemo.Controllers
     [ApiController]
     public class DemoConfigController : ControllerBase
     {
+        [HttpGet]
         public IActionResult Get([FromServices] IMyRepository repository)
         {
             return Ok(repository.GetConnectionString());
