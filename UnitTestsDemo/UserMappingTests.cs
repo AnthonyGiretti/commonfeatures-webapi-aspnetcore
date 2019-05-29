@@ -1,51 +1,50 @@
-﻿using FluentAssertions;
-using FluentValidation.Results;
-using WebApiDemo.Validators;
-using Xunit;
-using System.Linq;
-using WebApiDemo.Models;
-using WebApiDemo.Enum;
-using AutoMapper.Configuration;
+﻿using AutoFixture;
 using AutoMapper;
-using WebApiDemo.Mapping;
+using AutoMapper.Configuration;
 using ExpectedObjects;
+using WebApiDemo.Enum;
+using WebApiDemo.Mapping;
+using WebApiDemo.Models;
+using Xunit;
 
 namespace UnitTestsDemo
 {
-    public class UserMappingTests
+    public class MappingTests
     {
-        public UserMappingTests()
+        public class UserEntityTests
         {
-            var mappings = new MapperConfigurationExpression();
-            mappings.AddProfile<MyMappingProfiles>();
-            Mapper.Initialize(mappings);
-        }
+            private readonly Fixture _fixture;
 
-        [Fact]
-        public void WhenUserEntityIsWellSet_UserIsWellMapped()
-        {
-            // Arrange
-            var entity = new UserEntity
+            public UserEntityTests()
             {
-                Gender = Gender.Mister,
-                FirstName = "Anthony",
-                LastName = "Giretti",
-                Id = "123456789"
-            };
+                var mappings = new MapperConfigurationExpression();
+                mappings.AddProfile<MyMappingProfiles>();
+                Mapper.Reset();
+                Mapper.Initialize(mappings);
 
-            var expected = new User
+                _fixture = new Fixture();
+            }
+
+            [Fact]
+            public void WhenUserEntityIsWellSet_UserIsWellMapped()
             {
-                Gender = "Mister",
-                FirstName = "ANTHONY",
-                LastName = "GIRETTI",
-                SIN = "123456789"
-            }.ToExpectedObject();
+                // Arrange
+                var entity = _fixture.Create<UserEntity>();
 
-            // Act
-            var user = Mapper.Map<User>(entity);
+                var expected = new User
+                {
+                    Gender = entity.Gender.ToString(),
+                    FirstName = entity.FirstName.ToUpper(),
+                    LastName = entity.LastName.ToUpper(),
+                    SIN = entity.Id
+                }.ToExpectedObject();
 
-            // Assert
-            expected.ShouldEqual(user);
+                // Act
+                var user = Mapper.Map<User>(entity);
+
+                // Assert
+                expected.ShouldEqual(user);
+            }
         }
     }
 }

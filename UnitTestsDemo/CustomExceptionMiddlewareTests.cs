@@ -1,3 +1,4 @@
+using ExpectedObjects;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -26,11 +27,7 @@ namespace UnitTestsDemo
                 throw new Exception("Oooops error!");
             };
             var middleware = new CustomExceptionMiddleware(requestDelegate, loggerMock);
-
-            // Use DefaultHttpContext insteadof mocking HttpContext
             var context = new DefaultHttpContext();
-
-            // Initialize response body
             context.Response.Body = new MemoryStream();
 
             //Act
@@ -45,10 +42,9 @@ namespace UnitTestsDemo
             var streamText = reader.ReadToEnd();
             var objResponse = JsonConvert.DeserializeObject<Error>(streamText);
 
-            
-            objResponse
-            .Should()
-            .BeEquivalentTo(new { Message = "Unhandled error", Errors = new List<string>() , Code = "00009" });
+            var expectedError = new Error { Message = "Unhandled error", Errors = new List<string>(), Code = "00009" }.ToExpectedObject();
+
+            expectedError.ShouldEqual(objResponse);
 
             context.Response.StatusCode
             .Should()

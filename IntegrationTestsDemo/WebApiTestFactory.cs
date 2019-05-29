@@ -5,12 +5,12 @@ using WebApiDemo;
 
 namespace IntegrationTestsDemo
 {
-    public class WebApiTestsFactory : WebApplicationFactory<Startup>
+    public class WebApiTestsFactory : WebApplicationFactory<StartupTest>
     {
         protected override IWebHostBuilder CreateWebHostBuilder()
         {
             return WebHost.CreateDefaultBuilder()
-                .UseStartup<Startup>();
+                .UseStartup<StartupTest>();
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)

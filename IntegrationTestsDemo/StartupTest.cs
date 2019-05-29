@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using GST.Fake.Authentication.JwtBearer;
 using ImpromptuInterface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +20,7 @@ using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
@@ -37,9 +39,9 @@ using WebApiDemo.Validators;
 
 namespace WebApiDemo
 {
-    public class Startup
+    public class StartupTest
     {
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public StartupTest(IConfiguration configuration, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             // Init Serilog configuration
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
@@ -68,15 +70,10 @@ namespace WebApiDemo
             #region DemoAuthentication
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                options.Authority = "https://login.microsoftonline.com/136544d9-038e-4646-afff-10accb370679";
-                options.Audience = "257b6c36-1168-4aac-be93-6f2cd81cec43";
-                options.TokenValidationParameters.ValidateLifetime = true;
-                options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
-            });
+                options.DefaultScheme = FakeJwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = FakeJwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = FakeJwtBearerDefaults.AuthenticationScheme;
+            }).AddFakeJwtBearer();
             #endregion
 
             #region DemoAuthorization
@@ -91,10 +88,7 @@ namespace WebApiDemo
 
                 opts.AddPolicy("SuperSurveyCreator", p =>
                 {
-                    // Using value text for demo show, else use enum : ClaimTypes.Role
-                    //p.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "SurveyCreator");
-                    //p.RequireClaim("groups", "8115e3be-ac7a-4886-a1e6-5b6aaf810a8f");
-                    p.Requirements.Add(new SuperSurveyCreatorRequirement("SurveyCreator", "8115e3be-ac7a-4886-a1e6-5b6aaf810a8f"));
+                    p.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "SuperSurveyCreator");
                 });
             });
 
@@ -125,11 +119,6 @@ namespace WebApiDemo
             //});
             services.AddDbContext<DemoDbContext>(options => options.UseSqlServer(config.ConnectionString));
             services.AddScoped<ICountryRepository, EFCountryRepository>();
-            #endregion
-
-            #region DemoHealthCheck
-            services.AddHealthChecks()
-            .AddCheck("MyDatabase", new SqlConnectionHealthCheck(config.ConnectionString ?? string.Empty));
             #endregion
 
             #region DemoCache
@@ -164,30 +153,6 @@ namespace WebApiDemo
                     return new BadRequestObjectResult(result);
                 };
             });
-            #endregion
-
-            #region DemoDocumenting
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "My API + profiler integrated on top left page", Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
-                });
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
-                {
-                    { "Bearer", new string[] { } }
-                });
-            });
-            #endregion
-
-            #region DemoProfiling
-            services.AddMiniProfiler(options =>
-                options.RouteBasePath = "/profiler"
-            );
             #endregion
 
             #region DemoHttpClient
@@ -245,26 +210,6 @@ namespace WebApiDemo
                 app.UseDeveloperExceptionPage();
             }
 
-            // CACHING all response that return 200 ok
-            //app.UseResponseCaching();
-
-            #region MiniProfiler
-            // profiling, url to see last profile check: http://localhost:62258/profiler/results
-            app.UseMiniProfiler();
-            #endregion
-
-            #region Documenting
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.RoutePrefix = "api-doc";
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                // index.html customizable downloadable here: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/src/Swashbuckle.AspNetCore.SwaggerUI/index.html
-                // this custom html has miniprofiler integration
-                c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApiDemo.SwaggerIndex.html");
-            });
-            #endregion
-
             #region Logging
             loggerFactory.AddSerilog();
             #endregion
@@ -281,24 +226,9 @@ namespace WebApiDemo
             app.UseMiddleware<CustomExceptionMiddleware>();
             #endregion
 
-            #region HealthCheck
-            app.UseHealthChecks("/health", new HealthCheckOptions()
-            {
-                ResultStatusCodes =
-                {
-                    [HealthStatus.Healthy] = StatusCodes.Status200OK,
-                    [HealthStatus.Degraded] = StatusCodes.Status200OK,
-                    [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
-                }
-            });
-            #endregion
-
             #region Compression
             //app.UseResponseCompression();
             #endregion
-
-            // mini profiler 
-            //app.UseMiddleware<MiniProfilerMiddleware>();
 
             app.UseMvc();
         }

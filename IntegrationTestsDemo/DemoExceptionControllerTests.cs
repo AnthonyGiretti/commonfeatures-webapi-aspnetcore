@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using ExpectedObjects;
+using FluentAssertions;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -8,43 +9,46 @@ using Xunit;
 
 namespace IntegrationTestsDemo
 {
-    public class DemoExceptionControllerTests : IClassFixture<WebApiTestsFactory>
+    public class DemoExceptionControllerTests
     {
-        private readonly WebApiTestsFactory _factory;
-
-        public DemoExceptionControllerTests(WebApiTestsFactory factory)
+        public class GetTests : IClassFixture<WebApiTestsFactory>
         {
-            _factory = factory;
-        }
+            private readonly WebApiTestsFactory _factory;
 
-        [Fact]
-        public async Task WhenGetMethodRaiseAnException_WebAPIShouldHandleItandAnswerAProperErrorObjectAndStatusError500()
-        {
-            // Arrange
-            var httpClient = _factory.CreateClient();
-            // Act
-            var response = await httpClient.GetAsync("/api/DemoException");
+            public GetTests(WebApiTestsFactory factory)
+            {
+                _factory = factory;
+            }
 
-            // Assert
-            var responseData = await response
-            .Content
-            .ReadAsAsync<Error>();
+            [Fact]
+            public async Task WhenRaiseAnException_WebAPIShouldHandleItAndAnswerAProperErrorObjectAndStatusError500()
+            {
+                // Arrange
+                var httpClient = _factory.CreateClient();
 
-            responseData
-            .Should()
-            .BeEquivalentTo(new Error { Message = "Unhandled error", Errors = new List<string>(), Code = "00009" });
+                // Act
+                var response = await httpClient.GetAsync("/api/DemoException");
+                var responseData = await response
+                .Content
+                .ReadAsAsync<Error>();
 
-            response.StatusCode
-            .Should()
-            .Be((int)HttpStatusCode.InternalServerError);
+                // Assert
 
-            response
-            .Content
-            .Headers
-            .ContentType
-            .MediaType
-            .Should()
-            .Be("application/json");
-        }    
+                var expectedError = new Error { Message = "Unhandled error", Errors = new List<string>(), Code = "00009" }.ToExpectedObject();
+                expectedError.ShouldEqual(responseData);
+
+                response.StatusCode
+                .Should()
+                .Be((int)HttpStatusCode.InternalServerError);
+
+                response
+                .Content
+                .Headers
+                .ContentType
+                .MediaType
+                .Should()
+                .Be("application/json");
+            }
+        }   
     }
 }

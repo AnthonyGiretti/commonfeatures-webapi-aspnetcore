@@ -3,26 +3,33 @@ using FluentValidation.Results;
 using WebApiDemo.Validators;
 using Xunit;
 using System.Linq;
+using AutoFixture;
 
 namespace UnitTestsDemo
 {
     public class UserValidatorTests
     {
+        private readonly Fixture _fixture;
+        private readonly UserValidator _validator;
+        private const string _validSIN = "510390115";
+        private const string _invalidSIN = "123456789";
+
+        public UserValidatorTests()
+        {
+            _fixture = new Fixture();
+            _validator = new UserValidator();
+        }
+
         [Fact]
         public void WhenAUserIsWellSet_ValidationShouldSucceeed()
         {
             // Arrange
-            var validator = new UserValidator();
-            var user = new WebApiDemo.Models.User
-            {
-                Gender = "test",
-                SIN = "510390115",
-                FirstName = "anthony",
-                LastName = "giretti"
-            };
+            var user = _fixture.Build<WebApiDemo.Models.User>()
+                               .With(x => x.SIN, _validSIN)
+                               .Create();
 
             // Act
-            ValidationResult validationResult = validator.Validate(user);
+            ValidationResult validationResult = _validator.Validate(user);
 
             // Assert
             validationResult
@@ -32,20 +39,15 @@ namespace UnitTestsDemo
         }
 
         [Fact]
-        public void WhenASINIsNotValid_ValidationShouldFail()
+        public void WhenSINIsNotValid_ValidationShouldFail()
         {
             // Arrange
-            var validator = new UserValidator();
-            var user = new WebApiDemo.Models.User
-            {
-                Gender = "test",
-                SIN = "123456789",
-                FirstName = "anthony",
-                LastName = "giretti"
-            };
+            var user = _fixture.Build<WebApiDemo.Models.User>()
+                               .With(x => x.SIN, _invalidSIN)
+                               .Create();
 
             // Act
-            ValidationResult validationResult = validator.Validate(user);
+            ValidationResult validationResult = _validator.Validate(user);
 
             // Assert
             validationResult
@@ -57,7 +59,7 @@ namespace UnitTestsDemo
             .Errors
             .Select(x=> x.ErrorMessage)
             .Should()
-            .Contain("SIN (123456789) is not valid.");
+            .Contain($"SIN ({_invalidSIN}) is not valid.");
         }
     }
 }
