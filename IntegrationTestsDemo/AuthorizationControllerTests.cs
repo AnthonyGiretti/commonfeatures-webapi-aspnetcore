@@ -44,7 +44,7 @@ namespace IntegrationTestsDemo
                 var httpClient = _fixture.CreateClient();
                 dynamic data = new System.Dynamic.ExpandoObject();
                 data.email = _email;
-                httpClient.SetFakeBearerToken("Anthony Giretti", new[] { "SurveyCreator" }, (object)data);
+                httpClient.SetFakeBearerToken("Anthony Giretti", new string[] {}, (object)data);
 
                 // Act
                 var response = await httpClient.GetAsync(_url);
