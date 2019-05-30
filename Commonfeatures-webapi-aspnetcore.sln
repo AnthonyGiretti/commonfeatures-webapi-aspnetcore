@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestsDemo", "UnitTestsD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTestsDemo", "IntegrationTestsDemo\IntegrationTestsDemo.csproj", "{BB5111A3-95DE-4C21-8130-1555BF74FE74}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GST.Fake.Authentication.JwtBearer", "GST.Fake.Authentication.JwtBearer\GST.Fake.Authentication.JwtBearer.csproj", "{D4DD4DC7-525F-41CE-9238-CD312FE36787}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BB5111A3-95DE-4C21-8130-1555BF74FE74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB5111A3-95DE-4C21-8130-1555BF74FE74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB5111A3-95DE-4C21-8130-1555BF74FE74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4DD4DC7-525F-41CE-9238-CD312FE36787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4DD4DC7-525F-41CE-9238-CD312FE36787}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4DD4DC7-525F-41CE-9238-CD312FE36787}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4DD4DC7-525F-41CE-9238-CD312FE36787}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

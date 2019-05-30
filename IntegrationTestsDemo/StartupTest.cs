@@ -82,13 +82,13 @@ namespace WebApiDemo
                 opts.AddPolicy("SurveyCreator", p =>
                 {
                     // Using value text for demo show, else use enum : ClaimTypes.Role
-                    p.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "SurveyCreator");
+                    p.RequireClaim("role", "SurveyCreator");
 
                 });
 
                 opts.AddPolicy("SuperSurveyCreator", p =>
                 {
-                    p.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "SuperSurveyCreator");
+                    p.RequireClaim("role", "SuperSurveyCreator");
                 });
             });
 

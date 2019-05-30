@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApiDemo.Models;
 
 namespace WebApiDemo.Controllers
 {
@@ -16,15 +13,15 @@ namespace WebApiDemo.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "Hello";
+            return Ok("Hello");
         }
 
         // POST api/values
         [Authorize(Policy = "SurveyCreator")]
-        //[Authorize(Roles = "SurveyCreator")]
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult Post(User user)
         {
+            return Ok();
         }
 
         // DELETE api/values
