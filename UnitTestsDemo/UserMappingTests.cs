@@ -45,6 +45,27 @@ namespace UnitTestsDemo
                 // Assert
                 expected.ShouldEqual(user);
             }
+
+            [Fact]
+            public void WhenUserEntityIsWellSet_UserIsWellMapped3()
+            {
+                // Arrange
+                var entity = _fixture.Create<UserEntity>();
+
+                var expected = new User
+                {
+                    Gender = entity.Gender.ToString(),
+                    FirstName = entity.FirstName.ToUpper(),
+                    LastName = entity.LastName.ToUpper(),
+                    SIN = entity.Id
+                }.ToExpectedObject();
+
+                // Act
+                var user = Mapper.Map<User>(entity);
+
+                // Assert
+                expected.ShouldEqual(user);
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ namespace UnitTestsDemo
     public class CustomExceptionMiddlewareTests
     {
         [Fact]
-        public async Task WhenAGenericExceptionIsRaised_CustomExceptionMiddlewareShouldHandleItToProperErrorResponseAndLoggerCalled()
+        public async Task WhenAGenericExceptionIsRaised_ShouldHandleItToProperErrorResponseAndLoggerIsCalled()
         {
             // Arrange
             var loggerMock = Substitute.For<ILogger<CustomExceptionMiddleware>>();
