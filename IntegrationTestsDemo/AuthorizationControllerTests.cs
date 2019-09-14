@@ -54,6 +54,11 @@ namespace IntegrationTestsDemo
                 responseContent
                 .Should()
                 .Be("Hello");
+
+                response
+                .StatusCode
+                .Should()
+                .Be(HttpStatusCode.OK);
             }
         }
 

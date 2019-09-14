@@ -33,7 +33,6 @@ namespace IntegrationTestsDemo
                 .ReadAsAsync<Error>();
 
                 // Assert
-
                 var expectedError = new Error { Message = "Unhandled error", Errors = new List<string>(), Code = "00009" }.ToExpectedObject();
                 expectedError.ShouldEqual(responseData);
 

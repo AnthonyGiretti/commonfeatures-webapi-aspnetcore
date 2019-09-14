@@ -33,8 +33,7 @@ namespace UnitTestsDemo
             {
                 // Arrange
                 var service = new TransactionService(_transactionRepositoryMock);
-                var serializedData = JsonConvert.SerializeObject(_transactionData);
-                var dataTable = JsonConvert.DeserializeObject<DataTable>(serializedData);
+                var dataTable = JsonConvert.DeserializeObject<DataTable>(JsonConvert.SerializeObject(_transactionData));
                 var expectedResult = new List<Transaction>
                 {
                     new Transaction
@@ -72,11 +71,10 @@ namespace UnitTestsDemo
             {
                 // Arrange
                 var service = new TransactionService(_transactionRepositoryMock);
-                var dataTable =new DataTable("MyTable");
+                var dataTable = new DataTable("MyTable");
                 var expectedResult = new List<Transaction>().ToExpectedObject();
 
                 _transactionRepositoryMock.GetTransactionsByYear(Arg.Any<int>()).Returns(x => dataTable);
-
 
                 // Act
                 var result = service.GetTransactionsByYear(_year);
