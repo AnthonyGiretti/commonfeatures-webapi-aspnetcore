@@ -116,6 +116,8 @@ namespace WebApiDemo
             {
                 return new MyRepository(config);
             });
+
+            services.Configure<SmtpConfiguration>(Configuration.GetSection("SmtpConfiguration"));
             #endregion
 
             #region DemoCRUD EF + ORMLite
