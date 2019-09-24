@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
+using Microsoft.Extensions.Hosting;
 using Serilog;
+using System.IO;
 
 namespace WebApiDemo
 {
@@ -13,19 +15,32 @@ namespace WebApiDemo
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                    .ConfigureAppConfiguration((context, config) =>
-                    {                            
+        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+                    new HostBuilder()
+                    .UseContentRoot(Directory.GetCurrentDirectory())
+                    .ConfigureWebHostDefaults(webBuilder =>
+                    {
+                        webBuilder.UseKestrel()
+                                  .UseSerilog()
+                                  .UseStartup<Startup>();
+                    }).ConfigureAppConfiguration((context, config) =>
+                    {
+                        config.AddJsonFile("appsettings.json",
+                                             optional: false,
+                                             reloadOnChange: true)
+                              .AddEnvironmentVariables()
+                              .AddUserSecrets<Startup>();
+
                         var builtConfig = config.Build();
                         config.AddAzureKeyVault(
                             $"https://{builtConfig["KeyVault:Vault"]}.vault.azure.net/",
                             builtConfig["KeyVault:ClientId"],
                             builtConfig["KeyVault:ClientSecret"],
                             new DefaultKeyVaultSecretManager());
-                    })
-                    .UseApplicationInsights()
-                    .UseStartup<Startup>()
-                    .UseSerilog();
+                    }).ConfigureLogging((logging) =>
+                    {
+                        //logging.AddConsole();
+                        //logging.AddDebug();
+                    });
     }
 }

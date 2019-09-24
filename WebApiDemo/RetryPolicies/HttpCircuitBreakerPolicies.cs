@@ -9,7 +9,7 @@ namespace WebApiDemo.RetryPolicies
 {
     public class HttpCircuitBreakerPolicies
     {
-        public static CircuitBreakerPolicy<HttpResponseMessage> GetHttpCircuitBreakerPolicy(ILogger logger, ICircuitBreakerPolicyConfig circuitBreakerPolicyConfig)
+        public static IAsyncPolicy<HttpResponseMessage> GetHttpCircuitBreakerPolicy(ILogger logger, ICircuitBreakerPolicyConfig circuitBreakerPolicyConfig)
         {
             return HttpPolicyBuilders.GetDefaultBuilder()
                                           .CircuitBreakerAsync(circuitBreakerPolicyConfig.RetryCount + 1,

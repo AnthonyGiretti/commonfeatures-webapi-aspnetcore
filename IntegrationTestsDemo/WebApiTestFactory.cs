@@ -1,16 +1,22 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Hosting;
+using System.IO;
 using WebApiDemo;
 
 namespace IntegrationTestsDemo
 {
     public class WebApiTestsFactory : WebApplicationFactory<StartupTest>
     {
-        protected override IWebHostBuilder CreateWebHostBuilder()
+        protected override IHostBuilder CreateHostBuilder()
         {
-            return WebHost.CreateDefaultBuilder()
-                .UseStartup<StartupTest>();
+            return new HostBuilder()
+                    .UseContentRoot(Directory.GetCurrentDirectory())
+                    .ConfigureWebHostDefaults(webBuilder =>
+                    {
+                        webBuilder.UseKestrel()
+                                  .UseStartup<Startup>();
+                    });
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)

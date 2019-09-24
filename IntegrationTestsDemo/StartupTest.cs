@@ -3,31 +3,25 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using GST.Fake.Authentication.JwtBearer;
 using ImpromptuInterface;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using WebApiDemo.AuthorizationHandlers;
 using WebApiDemo.Database;
 using WebApiDemo.Extensions;
-using WebApiDemo.HealthCheck;
 using WebApiDemo.HttpClients;
 using WebApiDemo.Middlewares;
 using WebApiDemo.Models;
@@ -41,13 +35,11 @@ namespace WebApiDemo
 {
     public class StartupTest
     {
-        public StartupTest(IConfiguration configuration, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public StartupTest(IConfiguration configuration)
         {
             // Init Serilog configuration
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             Configuration = configuration;
-            LoggerFactory = loggerFactory;
-            ServiceProvider = serviceProvider;
 
             TypesToRegister = Assembly.Load("WebApiDemo")
                                       .GetTypes()
@@ -57,10 +49,6 @@ namespace WebApiDemo
         }
 
         public IConfiguration Configuration { get; }
-
-        public ILoggerFactory LoggerFactory { get; }
-
-        public IServiceProvider ServiceProvider { get; }
 
         public List<Type> TypesToRegister { get; }
 
@@ -102,9 +90,9 @@ namespace WebApiDemo
 
             #region DemoConfig
             var config = new {
-                ConnectionString = ServiceProvider.GetService<IConfiguration>()["MySecretConnectionString"]
+                ConnectionString = Configuration.GetSection("MySecretConnectionString").Value // <-- from Azure Keyvault
             }
-            .ActLike<IConfig>(); // <-- from Azure Keyvault
+            .ActLike<IConfig>();
 
             services.AddScoped<IMyRepository>(c =>
             {
@@ -131,11 +119,11 @@ namespace WebApiDemo
             #endregion
 
             #region DemoMapping Automapper
-            services.AddAutoMapper();
+            services.AddAutoMapper(Assembly.Load("WebApiDemo"));
             #endregion
 
             #region MVC + FluentValidation
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddFluentValidation();
+            services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Version_3_0).AddFluentValidation();
             #endregion
 
             #region override modelstate for fluentvalidation
@@ -159,8 +147,8 @@ namespace WebApiDemo
             services.AddHttpClient<IDataClient, DataClient>(client =>
             {
                 client.BaseAddress = new Uri("http://localhost:56190/api/");
-            })
-            .AddPolicyHandlers("PolicyConfig", LoggerFactory, Configuration);
+            });
+            //.AddPolicyHandlers("PolicyConfig", null, Configuration);
 
             services.AddHttpClient<IStreamingClient, StreamingClient>(client =>
             {
@@ -203,7 +191,7 @@ namespace WebApiDemo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -211,7 +199,7 @@ namespace WebApiDemo
             }
 
             #region Logging
-            loggerFactory.AddSerilog();
+            //loggerFactory.AddSerilog();
             #endregion
 
             #region Authenticating
@@ -230,7 +218,12 @@ namespace WebApiDemo
             //app.UseResponseCompression();
             #endregion
 
-            app.UseMvc();
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
         }
     }
 }

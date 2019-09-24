@@ -9,7 +9,7 @@ namespace WebApiDemo.RetryPolicies
 {
     public static class HttpRetryPolicies
     {
-        public static RetryPolicy<HttpResponseMessage> GetHttpRetryPolicy(ILogger logger, IRetryPolicyConfig retryPolicyConfig)
+        public static IAsyncPolicy<HttpResponseMessage> GetHttpRetryPolicy(ILogger logger, IRetryPolicyConfig retryPolicyConfig)
         {
             return HttpPolicyBuilders.GetDefaultBuilder()
                                           .WaitAndRetryAsync(retryPolicyConfig.RetryCount,

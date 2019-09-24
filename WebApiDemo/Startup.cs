@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
@@ -39,13 +40,13 @@ namespace WebApiDemo
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public Startup(IConfiguration configuration)
         {
             // Init Serilog configuration
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             Configuration = configuration;
-            LoggerFactory = loggerFactory;
-            ServiceProvider = serviceProvider;
+            //LoggerFactory = LoggerFactory;
+            //ServiceProvider = ServiceProvider;
 
             TypesToRegister = Assembly.Load("WebApiDemo")
                                       .GetTypes()
@@ -56,9 +57,9 @@ namespace WebApiDemo
 
         public IConfiguration Configuration { get; }
 
-        public ILoggerFactory LoggerFactory { get; }
+        //public ILoggerFactory LoggerFactory { get; }
 
-        public IServiceProvider ServiceProvider { get; }
+        //public IServiceProvider ServiceProvider { get; }
 
         public List<Type> TypesToRegister { get; }
 
@@ -107,10 +108,11 @@ namespace WebApiDemo
             #endregion
 
             #region DemoConfig
-            var config = new {
-                ConnectionString = ServiceProvider.GetService<IConfiguration>()["MySecretConnectionString"]
-            }
-            .ActLike<IConfig>(); // <-- from Azure Keyvault
+            //var connectionString = Configuration.GetSection("MySecretConnectionString").Value; // <-- from Azure Keyvault
+            var config = new
+            {
+                ConnectionString = Configuration.GetSection("MySecretConnectionString").Value // <-- from Azure Keyvault
+            }.ActLike<IConfig>();
 
             services.AddScoped<IMyRepository>(c =>
             {
@@ -144,11 +146,12 @@ namespace WebApiDemo
             #endregion
 
             #region DemoMapping Automapper
-            services.AddAutoMapper();
+            services.AddAutoMapper(Assembly.Load("WebApiDemo"));
             #endregion
 
             #region MVC + FluentValidation
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddFluentValidation();
+            //services.AddControllers();
+            services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Version_3_0).AddFluentValidation();
             #endregion
 
             #region override modelstate for fluentvalidation
@@ -196,8 +199,8 @@ namespace WebApiDemo
             services.AddHttpClient<IDataClient, DataClient>(client =>
             {
                 client.BaseAddress = new Uri("http://localhost:56190/api/");
-            })
-            .AddPolicyHandlers("PolicyConfig", LoggerFactory, Configuration);
+            });
+            //.AddPolicyHandlers("PolicyConfig", null, Configuration);
 
             services.AddHttpClient<IStreamingClient, StreamingClient>(client =>
             {
@@ -237,10 +240,14 @@ namespace WebApiDemo
             // Global Service provider
             services.AddScoped(typeof(IServicesProvider<>), typeof(ServicesProvider<>));
             #endregion
+
+            #region DemoApplicationInsights
+            services.AddApplicationInsightsTelemetry();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -256,15 +263,15 @@ namespace WebApiDemo
             #endregion
 
             #region Documenting
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.RoutePrefix = "api-doc";
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                // index.html customizable downloadable here: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/src/Swashbuckle.AspNetCore.SwaggerUI/index.html
-                // this custom html has miniprofiler integration
-                c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApiDemo.SwaggerIndex.html");
-            });
+            //app.UseSwagger();
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.RoutePrefix = "api-doc";
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            //    // index.html customizable downloadable here: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/src/Swashbuckle.AspNetCore.SwaggerUI/index.html
+            //    // this custom html has miniprofiler integration
+            //    c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApiDemo.SwaggerIndex.html");
+            //});
             #endregion
 
             #region Logging
@@ -302,7 +309,12 @@ namespace WebApiDemo
             // mini profiler 
             //app.UseMiddleware<MiniProfilerMiddleware>();
 
-            app.UseMvc();
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
         }
     }
 }
