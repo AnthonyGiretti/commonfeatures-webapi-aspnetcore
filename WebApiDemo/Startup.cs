@@ -278,10 +278,13 @@ namespace WebApiDemo
             loggerFactory.AddSerilog();
             #endregion
 
-            #region Authenticating
+            app.UseRouting();
+
+            #region Authenticating & Authorization
             app.UseAuthentication();
+            app.UseAuthorization();
             #endregion
-          
+
             #region Global caching middleware
             app.UseMiddleware<CachingMiddleware>();
             #endregion
@@ -308,8 +311,6 @@ namespace WebApiDemo
 
             // mini profiler 
             //app.UseMiddleware<MiniProfilerMiddleware>();
-
-            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
