@@ -73,10 +73,42 @@ namespace UnitTestsDemo
             Assert.Empty(result);
         }
 
-       
-        public void TestIfGetTransactionsByIdWorks()
+        [Description("Sample of bad practice")]
+        [Fact]
+        public void TestIfGetTransactionByIdWorks()
         {
+            DataTable dataTable = new DataTable("MyTable");
+            DataColumn idColumn = new DataColumn("id", typeof(int));
+            DataColumn amountColumn = new DataColumn("amount", typeof(decimal));
+            DataColumn dateColumn = new DataColumn("date", typeof(DateTime));
 
+            dataTable.Columns.Add(idColumn);
+            dataTable.Columns.Add(amountColumn);
+            dataTable.Columns.Add(dateColumn);
+
+            DataRow newRow = dataTable.NewRow();
+            newRow["id"] = 1;
+            newRow["amount"] = 10.3m;
+            newRow["date"] = new DateTime(2018, 10, 20);
+            dataTable.Rows.Add(newRow);
+
+            var transactionRepositoryMock = Substitute.For<ITransactionRepository>();
+            transactionRepositoryMock.GetTransactionById(Arg.Any<int>()).Returns(x => dataTable);
+
+            var service = new TransactionService(transactionRepositoryMock);
+
+            // Act
+            var result = service.GetTransactionById(6);
+
+            // Assert
+            Assert.Equal(1, result.TransactionId);
+            Assert.Equal(10.3m, result.TransactionAmount);
+            Assert.Equal("2018-10-20", result.TransactionDate.ToString("yyy-MM-dd"));
+
+            dataTable = new DataTable("MyTable");
+
+            result = service.GetTransactionById(6);
+            Assert.Null(result);
         }
 
         public class GetTransactionsByYearTests
