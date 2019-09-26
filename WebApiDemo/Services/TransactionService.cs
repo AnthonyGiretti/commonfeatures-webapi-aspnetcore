@@ -35,5 +35,22 @@ namespace WebApiDemo.Services
 
             return list;
         }
+
+        public Transaction GetTransactionById(int transactionId)
+        {
+            var datatable = _transactionRepository.GetTransactionById(transactionId);
+
+            if (null == datatable || datatable.Rows.Count == 0)
+                return null;
+
+            var row = datatable.Rows[0];
+            return new Transaction
+            {
+                TransactionId = Convert.ToInt32(row["id"]),
+                TransactionAmount = Convert.ToDecimal(row["amount"]),
+                TransactionDate = Convert.ToDateTime(row["date"])
+            };
+            
+        }
     }
 }
