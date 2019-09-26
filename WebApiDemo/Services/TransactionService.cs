@@ -25,14 +25,8 @@ namespace WebApiDemo.Services
 
             foreach (DataRow row in datatable.Rows)
             {
-                list.Add(new Transaction
-                {
-                    TransactionId = Convert.ToInt32(row["id"]),
-                    TransactionAmount = Convert.ToDecimal(row["amount"]),
-                    TransactionDate = Convert.ToDateTime(row["date"])
-                });
+                list.Add(ToTransaction(row));
             }
-
             return list;
         }
 
@@ -43,14 +37,21 @@ namespace WebApiDemo.Services
             if (null == datatable || datatable.Rows.Count == 0)
                 return null;
 
-            var row = datatable.Rows[0];
-            return new Transaction
+            return ToTransaction(datatable.Rows[0]);        
+        }
+
+        private static Transaction ToTransaction(DataRow row)
+        {
+            if (row != null)
             {
-                TransactionId = Convert.ToInt32(row["id"]),
-                TransactionAmount = Convert.ToDecimal(row["amount"]),
-                TransactionDate = Convert.ToDateTime(row["date"])
-            };
-            
+                return new Transaction
+                {
+                    TransactionId = Convert.ToInt32(row["id"]),
+                    TransactionAmount = Convert.ToDecimal(row["amount"]),
+                    TransactionDate = Convert.ToDateTime(row["date"])
+                };
+            }
+            return null;
         }
     }
 }
