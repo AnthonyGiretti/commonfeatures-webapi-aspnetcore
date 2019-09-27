@@ -32,6 +32,7 @@ using WebApiDemo.Middlewares;
 using WebApiDemo.Models;
 using WebApiDemo.Providers;
 using WebApiDemo.Repositories;
+using WebApiDemo.RetryPolicies.Config;
 using WebApiDemo.Services;
 using WebApiDemo.Services.Tenants;
 using WebApiDemo.Validators;
@@ -45,8 +46,6 @@ namespace WebApiDemo
             // Init Serilog configuration
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             Configuration = configuration;
-            //LoggerFactory = LoggerFactory;
-            //ServiceProvider = ServiceProvider;
 
             TypesToRegister = Assembly.Load("WebApiDemo")
                                       .GetTypes()
@@ -56,10 +55,6 @@ namespace WebApiDemo
         }
 
         public IConfiguration Configuration { get; }
-
-        //public ILoggerFactory LoggerFactory { get; }
-
-        //public IServiceProvider ServiceProvider { get; }
 
         public List<Type> TypesToRegister { get; }
 
@@ -196,11 +191,14 @@ namespace WebApiDemo
             #endregion
 
             #region DemoHttpClient
+            var policyConfig = new PolicyConfig();
+            Configuration.Bind("PolicyConfig", policyConfig);
+
             services.AddHttpClient<IDataClient, DataClient>(client =>
             {
                 client.BaseAddress = new Uri("http://localhost:56190/api/");
             });
-            //.AddPolicyHandlers("PolicyConfig", null, Configuration);
+            //.AddPolicyHandlers(policyConfig);
 
             services.AddHttpClient<IStreamingClient, StreamingClient>(client =>
             {
@@ -247,7 +245,7 @@ namespace WebApiDemo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -274,11 +272,9 @@ namespace WebApiDemo
             //});
             #endregion
 
-            #region Logging
-            loggerFactory.AddSerilog();
-            #endregion
-
+            #region Routing
             app.UseRouting();
+            #endregion
 
             #region Authenticating & Authorization
             app.UseAuthentication();
@@ -312,10 +308,12 @@ namespace WebApiDemo
             // mini profiler 
             //app.UseMiddleware<MiniProfilerMiddleware>();
 
+            #region Endpoints
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
             });
+            #endregion
         }
     }
 }

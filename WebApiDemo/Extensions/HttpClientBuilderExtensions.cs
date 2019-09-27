@@ -8,19 +8,13 @@ namespace WebApiDemo.Extensions
 {
     public static class HttpClientBuilderExtensions
     {
-        public static IHttpClientBuilder AddPolicyHandlers(this IHttpClientBuilder httpClientBuilder, string policySectionName, ILoggerFactory loggerFactory, IConfiguration configuration)
+        public static IHttpClientBuilder AddPolicyHandlers(this IHttpClientBuilder httpClientBuilder, PolicyConfig policyConfig, ILogger logger)
         {
-            var retryLogger = loggerFactory.CreateLogger("PollyHttpRetryPoliciesLogger");
-            var circuitBreakerLogger = loggerFactory.CreateLogger("PollyHttpCircuitBreakerPoliciesLogger");
-
-            var policyConfig = new PolicyConfig();
-            configuration.Bind(policySectionName, policyConfig);
-
             var circuitBreakerPolicyConfig = (ICircuitBreakerPolicyConfig)policyConfig;
             var retryPolicyConfig = (IRetryPolicyConfig)policyConfig;
 
-            return httpClientBuilder.AddRetryPolicyHandler(retryLogger, retryPolicyConfig)
-                                    .AddCircuitBreakerHandler(circuitBreakerLogger, circuitBreakerPolicyConfig);
+            return httpClientBuilder.AddRetryPolicyHandler(logger, retryPolicyConfig)
+                                    .AddCircuitBreakerHandler(logger, circuitBreakerPolicyConfig);
         }
 
         public static IHttpClientBuilder AddRetryPolicyHandler(this IHttpClientBuilder httpClientBuilder, ILogger logger, IRetryPolicyConfig retryPolicyConfig)
