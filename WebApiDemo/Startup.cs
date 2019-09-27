@@ -197,8 +197,8 @@ namespace WebApiDemo
             services.AddHttpClient<IDataClient, DataClient>(client =>
             {
                 client.BaseAddress = new Uri("http://localhost:56190/api/");
-            });
-            //.AddPolicyHandlers(policyConfig);
+            })
+            .AddPolicyHandlers(policyConfig);
 
             services.AddHttpClient<IStreamingClient, StreamingClient>(client =>
             {
