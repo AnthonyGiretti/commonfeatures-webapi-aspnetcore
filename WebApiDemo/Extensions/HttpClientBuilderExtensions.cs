@@ -11,6 +11,8 @@ namespace WebApiDemo.Extensions
 {
     public static class HttpClientBuilderExtensions
     {
+        private static Func<IServiceProvider, ILogger<IHttpClientBuilder>> LoggerFunc = (services) => services.GetRequiredService<ILogger<IHttpClientBuilder>>();
+
         public static IHttpClientBuilder AddPolicyHandlers(this IHttpClientBuilder httpClientBuilder, PolicyConfig policyConfig)
         {
             var circuitBreakerPolicyConfig = (ICircuitBreakerPolicyConfig)policyConfig;
@@ -22,12 +24,16 @@ namespace WebApiDemo.Extensions
 
         public static IHttpClientBuilder AddRetryPolicyHandler(this IHttpClientBuilder httpClientBuilder, IRetryPolicyConfig retryPolicyConfig)
         {
-            return httpClientBuilder.AddPolicyHandler((services, request) => HttpRetryPolicies.GetHttpRetryPolicy(services.GetRequiredService<ILogger<IHttpClientBuilder>>(), retryPolicyConfig));
+            Func<IServiceProvider, HttpRequestMessage, IAsyncPolicy<HttpResponseMessage>> myFunc = (services, request) => HttpRetryPolicies.GetHttpRetryPolicy(LoggerFunc(services), retryPolicyConfig);
+
+            return httpClientBuilder.AddPolicyHandler(myFunc);
         }
 
         public static IHttpClientBuilder AddCircuitBreakerHandler(this IHttpClientBuilder httpClientBuilder, ICircuitBreakerPolicyConfig circuitBreakerPolicyConfig)
         {
-            return httpClientBuilder.AddPolicyHandler((services, request) => HttpCircuitBreakerPolicies.GetHttpCircuitBreakerPolicy(services.GetRequiredService<ILogger<IHttpClientBuilder>>(), circuitBreakerPolicyConfig));
+            Func<IServiceProvider, HttpRequestMessage, IAsyncPolicy<HttpResponseMessage>> myFunc = (services, request) => HttpCircuitBreakerPolicies.GetHttpCircuitBreakerPolicy(LoggerFunc(services), circuitBreakerPolicyConfig);
+
+            return httpClientBuilder.AddPolicyHandler(myFunc);
         }
     }
 }
