@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
+using WebApiDemo.Helpers;
 using WebApiDemo.Models;
 using WebApiDemo.Repositories;
 
@@ -25,7 +25,7 @@ namespace WebApiDemo.Services
 
             foreach (DataRow row in datatable.Rows)
             {
-                list.Add(ToTransaction(row));
+                list.Add(row.ToTransaction());
             }
             return list;
         }
@@ -37,9 +37,10 @@ namespace WebApiDemo.Services
             if (null == datatable || datatable.Rows.Count == 0)
                 return null;
 
-            return ToTransaction(datatable.Rows[0]);        
+            return datatable.Rows[0].ToTransaction();        
         }
 
+        /*
         private static Transaction ToTransaction(DataRow row)
         {
             if (row != null)
@@ -53,5 +54,6 @@ namespace WebApiDemo.Services
             }
             return null;
         }
+        */
     }
 }
