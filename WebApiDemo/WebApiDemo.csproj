@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <ApplicationInsightsResourceId>/subscriptions/38c83fd2-7d08-47a6-9bd6-8e3b04b298bd/resourcegroups/Demos/providers/microsoft.insights/components/DemoWebAPI</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/38c83fd2-7d08-47a6-9bd6-8e3b04b298bd/resourcegroups/Demos/providers/microsoft.insights/components/DemoWebAPI</ApplicationInsightsAnnotationResourceId>
     <UserSecretsId>465546e3-1d8a-4f2b-9143-8750a3f29603</UserSecretsId>
@@ -30,7 +31,6 @@
     <PackageReference Include="ImpromptuInterface" Version="7.0.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.11.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.6" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />

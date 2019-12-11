@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiDemo", "WebApiDemo\WebApiDemo.csproj", "{BE793F05-4A07-44CE-B32E-4F5E6C1CD149}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTestsDemo", "IntegrationTestsDemo\IntegrationTestsDemo.csproj", "{BB5111A3-95DE-4C21-8130-1555BF74FE74}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GST.Fake.Authentication.JwtBearer", "GST.Fake.Authentication.JwtBearer\GST.Fake.Authentication.JwtBearer.csproj", "{D4DD4DC7-525F-41CE-9238-CD312FE36787}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWorker", "DemoWorker\DemoWorker.csproj", "{2AA813B0-D467-4544-8A0A-7030FC40BA73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{D4DD4DC7-525F-41CE-9238-CD312FE36787}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4DD4DC7-525F-41CE-9238-CD312FE36787}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4DD4DC7-525F-41CE-9238-CD312FE36787}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AA813B0-D467-4544-8A0A-7030FC40BA73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AA813B0-D467-4544-8A0A-7030FC40BA73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AA813B0-D467-4544-8A0A-7030FC40BA73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AA813B0-D467-4544-8A0A-7030FC40BA73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
