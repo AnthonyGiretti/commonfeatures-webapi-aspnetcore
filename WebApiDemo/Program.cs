@@ -38,8 +38,7 @@ namespace WebApiDemo
                             new DefaultKeyVaultSecretManager());
                     }).ConfigureLogging((logging) =>
                     {
-                        //logging.AddConsole();
-                        //logging.AddDebug();
+                        logging.AddSerilog();
                     });
     }
 }
