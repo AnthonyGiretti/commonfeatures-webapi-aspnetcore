@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DemoWorker
 {
@@ -17,6 +15,18 @@ namespace DemoWorker
             _logger = logger;
         }
 
+        public override async Task StartAsync(CancellationToken cancellationToken)
+        {
+            // INIT YOUR STUFF HERE
+            await base.StartAsync(cancellationToken);
+        }
+
+        public override async Task StopAsync(CancellationToken cancellationToken)
+        {
+            // STOP YOUR STUFF HERE
+            await base.StopAsync(cancellationToken);
+        }
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
@@ -25,6 +35,11 @@ namespace DemoWorker
                 await Task.Delay(1000, stoppingToken);
             }
         }
+
+        public override void Dispose()
+        {
+            // DISPOSE YOUR STUFF HERE
+            base.Dispose();
+        }
     }
 }
-
