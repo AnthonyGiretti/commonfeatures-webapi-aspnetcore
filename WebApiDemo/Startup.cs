@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -145,8 +146,12 @@ namespace WebApiDemo
             #endregion
 
             #region MVC + FluentValidation
-            //services.AddControllers();
-            services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Version_3_0).AddFluentValidation();
+            services.AddControllers().AddNewtonsoftJson(options => 
+            {
+                options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+            .AddFluentValidation();
             #endregion
 
             #region override modelstate for fluentvalidation
