@@ -172,21 +172,21 @@ namespace WebApiDemo
             #endregion
 
             #region DemoDocumenting
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "My API + profiler integrated on top left page", Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
-                });
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
-                {
-                    { "Bearer", new string[] { } }
-                });
-            });
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new Info { Title = "My API + profiler integrated on top left page", Version = "v1" });
+            //    c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+            //    {
+            //        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+            //        Name = "Authorization",
+            //        In = "header",
+            //        Type = "apiKey"
+            //    });
+            //    c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+            //    {
+            //        { "Bearer", new string[] { } }
+            //    });
+            //});
             #endregion
 
             #region DemoProfiling

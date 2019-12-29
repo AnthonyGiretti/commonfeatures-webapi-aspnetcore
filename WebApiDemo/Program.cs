@@ -16,8 +16,7 @@ namespace WebApiDemo
         }
 
         public static IHostBuilder CreateWebHostBuilder(string[] args) =>
-                    new HostBuilder()
-                    .UseContentRoot(Directory.GetCurrentDirectory())
+                    Host.CreateDefaultBuilder(args)
                     .ConfigureWebHostDefaults(webBuilder =>
                     {
                         webBuilder.UseKestrel()
