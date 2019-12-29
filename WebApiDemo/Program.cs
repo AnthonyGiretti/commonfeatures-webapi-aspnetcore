@@ -18,6 +18,7 @@ namespace WebApiDemo
                     .ConfigureAppConfiguration((context, config) =>
                     {                            
                         var builtConfig = config.Build();
+
                         config.AddAzureKeyVault(
                             $"https://{builtConfig["KeyVault:Vault"]}.vault.azure.net/",
                             builtConfig["KeyVault:ClientId"],
