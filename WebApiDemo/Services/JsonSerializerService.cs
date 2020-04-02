@@ -5,20 +5,24 @@ using System.Text.Json.Serialization;
 
 namespace WebApiDemo.Services
 {
+    /*
+    public class NewtonsoftSerializerService
+    {
+        public T DeSerialize<T>(string stringObject)
+        {
+            return JsonConvert.DeserializeObject<T>(stringObject);
+        }
 
-    //public class NewtonsoftSerializerService 
-    //{
-    //    public T DeSerialize<T>(string stringObject)
-    //    {
-    //        return JsonConvert.DeserializeObject<T>(stringObject);
-    //    }
+        public string Serialize<T>(T objectToSerialize)
+        {
+            return JsonConvert.SerializeObject(objectToSerialize);
+        }
+    }
+    */
 
-    //    public string Serialize<T>(T objectToSerialize)
-    //    {
-    //        return JsonConvert.SerializeObject(objectToSerialize);
-    //    }
-    //}
-
+    /// <summary>
+    /// Brought by .NET Core 3
+    /// </summary>
     public class JsonSerializerService
     {
         public T DeSerialize<T>(string stringObject)
@@ -28,7 +32,7 @@ namespace WebApiDemo.Services
 
         public string Serialize<T>(T objectToSerialize)
         {
-            throw new NotImplementedException();
+            return JsonSerializer.Serialize(objectToSerialize);
         }
     }
 }
