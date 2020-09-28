@@ -16,9 +16,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.Swagger;
 using System;
 using System.Collections.Generic;
 using System.IO.Compression;
@@ -150,7 +152,7 @@ namespace WebApiDemo
             {
                 options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+            }).SetCompatibilityVersion(CompatibilityVersion.Latest)
             .AddFluentValidation();
             #endregion
 
@@ -172,21 +174,38 @@ namespace WebApiDemo
             #endregion
 
             #region DemoDocumenting
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new Info { Title = "My API + profiler integrated on top left page", Version = "v1" });
-            //    c.AddSecurityDefinition("Bearer", new ApiKeyScheme
-            //    {
-            //        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-            //        Name = "Authorization",
-            //        In = "header",
-            //        Type = "apiKey"
-            //    });
-            //    c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
-            //    {
-            //        { "Bearer", new string[] { } }
-            //    });
-            //});
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1.1", new OpenApiInfo { Title = "My API", Version = "v1.1" });
+                c.SwaggerDoc("v2.0", new OpenApiInfo { Title = "My API", Version = "v2.0" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+
+                        },
+                        new List<string>()
+                    }
+                });
+            });
             #endregion
 
             #region DemoProfiling
@@ -257,6 +276,8 @@ namespace WebApiDemo
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+
             // CACHING all response that return 200 ok
             //app.UseResponseCaching();
 
@@ -266,15 +287,17 @@ namespace WebApiDemo
             #endregion
 
             #region Documenting
-            //app.UseSwagger();
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.RoutePrefix = "api-doc";
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            //    // index.html customizable downloadable here: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/src/Swashbuckle.AspNetCore.SwaggerUI/index.html
-            //    // this custom html has miniprofiler integration
-            //    c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApiDemo.SwaggerIndex.html");
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.RoutePrefix = "api-doc";
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1.1/swagger.json", "My API V1.1");
+                c.SwaggerEndpoint("/swagger/v2.0/swagger.json", "My API V2");
+                // index.html customizable downloadable here: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/src/Swashbuckle.AspNetCore.SwaggerUI/index.html
+                // this custom html has miniprofiler integration
+                c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApiDemo.SwaggerIndex.html");
+            });
             #endregion
 
             #region Routing
@@ -307,11 +330,13 @@ namespace WebApiDemo
             #endregion
 
             #region Compression
-            //app.UseResponseCompression();
+            app.UseResponseCompression();
             #endregion
 
+            #region Global profiling
             // mini profiler 
-            //app.UseMiddleware<MiniProfilerMiddleware>();
+            app.UseMiddleware<MiniProfilerMiddleware>();
+            #endregion
 
             #region Endpoints
             app.UseEndpoints(endpoints =>

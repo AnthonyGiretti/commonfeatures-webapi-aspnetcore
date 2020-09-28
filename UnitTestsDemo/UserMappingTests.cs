@@ -15,12 +15,12 @@ namespace UnitTestsDemo
     {
         public class UserEntityTests
         {
+            private readonly IMapper _mapper;
+
             public UserEntityTests()
             {
-                var mappings = new MapperConfigurationExpression();
-                mappings.AddProfile<MyMappingProfiles>();
-                Mapper.Reset();
-                Mapper.Initialize(mappings);
+                var config = new MapperConfiguration(cfg => cfg.AddProfile<MyMappingProfiles>());
+                var _mapper = config.CreateMapper();
             }
 
             [Fact]
@@ -50,19 +50,17 @@ namespace UnitTestsDemo
     }
     */
 
-
     public class MappingTests
     {
         public class UserEntityTests
         {
             private readonly Fixture _fixture;
+            private readonly IMapper _mapper;
 
             public UserEntityTests()
             {
-                var mappings = new MapperConfigurationExpression();
-                mappings.AddProfile<MyMappingProfiles>();
-                Mapper.Reset();
-                Mapper.Initialize(mappings);
+                var config = new MapperConfiguration(cfg => cfg.AddProfile<MyMappingProfiles>());
+                _mapper = config.CreateMapper();
 
                 _fixture = new Fixture();
             }
@@ -82,11 +80,10 @@ namespace UnitTestsDemo
                 }.ToExpectedObject();
 
                 // Act
-                var user = Mapper.Map<User>(entity);
+                var user = _mapper.Map<User>(entity);
 
                 // Assert
                 expected.ShouldEqual(user);
-                //expected.Should().BeEquivalentTo(user, options => options.ComparingByMembers<User>());
             }
         }
     }

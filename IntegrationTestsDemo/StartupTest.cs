@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using GST.Fake.Authentication.JwtBearer;
 using ImpromptuInterface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -12,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -55,15 +53,6 @@ namespace WebApiDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            #region DemoAuthentication
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = FakeJwtBearerDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = FakeJwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = FakeJwtBearerDefaults.AuthenticationScheme;
-            }).AddFakeJwtBearer();
-            #endregion
-
             #region DemoAuthorization
             services.AddAuthorization(opts =>
             {

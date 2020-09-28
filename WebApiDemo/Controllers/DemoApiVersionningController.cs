@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApiDemo.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [ApiVersion("1.0", Deprecated = true)]
     [ApiVersion("1.1")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -26,6 +27,7 @@ namespace WebApiDemo.Controllers
             return Ok(HttpContext.GetRequestedApiVersion().ToString());
         }
     }
+
 
     [ApiVersion("2.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
