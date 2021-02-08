@@ -1,33 +1,51 @@
 ﻿using ExpectedObjects;
 using FluentAssertions;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using WebApiDemo;
 using WebApiDemo.Models;
+using WebMotions.Fake.Authentication.JwtBearer;
 using Xunit;
 
 namespace IntegrationTestsDemo
 {
     public class DemoExceptionControllerTests
     {
-        public class GetTests : IClassFixture<WebApiTestsFactory>
+        public class GetTests
         {
-            private readonly WebApiTestsFactory _factory;
+            private readonly HttpClient _httpClient;
 
-            public GetTests(WebApiTestsFactory factory)
+            public GetTests()
             {
-                _factory = factory;
+                var host = new HostBuilder()
+              .ConfigureWebHost(webBuilder =>
+              {
+                  webBuilder.UseStartup<StartupTest>();
+                  webBuilder
+                      .UseTestServer()
+                      .ConfigureTestServices(collection =>
+                      {
+                          collection.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer();
+                      });
+              })
+              .Start();
+
+                _httpClient = host.GetTestServer().CreateClient();
             }
 
             [Fact]
             public async Task WhenRaiseAnException_WebAPIShouldHandleItAndAnswerAProperErrorObjectAndStatusError500()
             {
                 // Arrange
-                var httpClient = _factory.CreateClient();
 
                 // Act
-                var response = await httpClient.GetAsync("/api/DemoException");
+                var response = await _httpClient.GetAsync("/api/DemoException");
                 var responseData = await response
                 .Content
                 .ReadAsAsync<Error>();

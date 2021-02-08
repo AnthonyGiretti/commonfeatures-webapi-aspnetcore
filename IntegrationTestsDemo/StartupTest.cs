@@ -28,7 +28,6 @@ using WebApiDemo.Repositories;
 using WebApiDemo.Services;
 using WebApiDemo.Services.Tenants;
 using WebApiDemo.Validators;
-using WebMotions.Fake.Authentication.JwtBearer;
 
 namespace WebApiDemo
 {
@@ -54,15 +53,6 @@ namespace WebApiDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            #region DemoAuthentication
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = FakeJwtBearerDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = FakeJwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = FakeJwtBearerDefaults.AuthenticationScheme;
-            }).AddFakeJwtBearer();
-            #endregion
-
             #region DemoAuthorization
             services.AddAuthorization(opts =>
             {
