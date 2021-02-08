@@ -4,8 +4,8 @@ using WebApiDemo.Models;
 
 namespace WebApiDemo.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class DemoAuthorizationController : ControllerBase
     {
         // GET api/values/5
