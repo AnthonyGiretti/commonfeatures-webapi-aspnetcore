@@ -15,7 +15,7 @@ namespace IntegrationTestsDemo
                     .ConfigureWebHostDefaults(webBuilder =>
                     {
                         webBuilder.UseKestrel()
-                                  .UseStartup<Startup>();
+                                  .UseStartup<StartupTest>();
                     });
         }
 

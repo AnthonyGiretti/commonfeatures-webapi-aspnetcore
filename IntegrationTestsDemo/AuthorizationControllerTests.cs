@@ -1,9 +1,10 @@
 using FluentAssertions;
-using GST.Fake.Authentication.JwtBearer;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using WebMotions.Fake.Authentication.JwtBearer;
 using Xunit;
 
 namespace IntegrationTestsDemo
@@ -37,7 +38,7 @@ namespace IntegrationTestsDemo
                 .Be(HttpStatusCode.Unauthorized);
             }
 
-            [Fact(Skip = "Not working")]
+            [Fact]
             public async Task WhenInvokedWithAValidToken_ShouldAnswerOkWithExpectedData()
             {
                 // Arrange
@@ -95,7 +96,7 @@ namespace IntegrationTestsDemo
                 .Be(HttpStatusCode.Unauthorized);
             }
 
-            [Fact(Skip = "Not working")]
+            [Fact]
             public async Task WhenInvokedWithAValidTokenAndWithoutProperRole_ShouldAnswerForbidden()
             {
                 // Arrange
@@ -103,7 +104,7 @@ namespace IntegrationTestsDemo
 
                 dynamic data = new System.Dynamic.ExpandoObject();
                 data.email = _email;
-                httpClient.SetFakeBearerToken(_username, new[] { _invalidRole }, (object)data);
+                httpClient.SetFakeBearerToken("Anthony", new[] { _invalidRole }, (object)Convert.ToBase64String(data));
 
                 // Act
                 var response = await httpClient.PostAsync(_url, _content);
@@ -115,7 +116,7 @@ namespace IntegrationTestsDemo
                 .Be(HttpStatusCode.Forbidden);
             }
 
-            [Fact(Skip = "Not working")]
+            [Fact]
             public async Task WhenInvokedWithAValidTokenAndProperRole_ShouldAnswerOk()
             {
                 // Arrange
